@@ -1,0 +1,68 @@
+<div class="container">
+  <div>
+    <h3>Event filter</h3>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-sm-2 d-flex align-items-center"><label for="dateFrom">Date from</label></div>
+        <div class="col-sm-4">
+          <mat-form-field>
+            <input matInput [matDatepicker]="dateFromPicker" id="dateFrom" formControlName="dateFrom" >
+            <mat-datepicker-toggle matSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dateFromPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-2 d-flex align-items-center"><label for="dateTo">Date to</label></div>
+        <div class="col-sm-4">
+          <mat-form-field>
+            <input matInput [matDatepicker]="dateToPicker" id="dateTo" formControlName="dateTo">
+            <mat-datepicker-toggle matSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dateToPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 d-flex align-items-center"><label for="track">ELR / Track</label></div>
+        <div class="col-sm-10"><input type="text" class="form-control" id="track" formControlName="track"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 d-flex align-items-center"><label for="distFrom">Dist From</label></div>
+        <div class="col-sm-2"><input type="text" class="form-control" id="distFrom" formControlName="distFrom"></div>
+        <div class="col-sm-2 d-flex align-items-center"><label for="distTo">Dist To</label></div>
+        <div class="col-sm-2"><input type="text" class="form-control" id="distTo" formControlName="distTo"></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 d-flex align-items-center"><label for="direction">Mileage Direction</label></div>
+        <div class="col-sm-4">
+          <!-- <mat-form-field appearance="fill"> -->
+            <select formControlName="direction">
+              <option value="" selected>Any</option>
+              <option value="inc">Increasing</option>
+              <option value="dec">Decreasing</option>
+            </select>
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-2 d-flex align-items-center"><label for="direction">Event Type</label></div>
+        <div class="col-sm-4">
+          <!-- <mat-form-field appearance="fill"> -->
+            <select formControlName="eventType">
+              <option value="" selected>Any</option>
+              <option value="L.BP">Lateral</option>
+              <option value="V.BP">Vertical</option>
+            </select>
+          <!-- </mat-form-field> -->
+        </div>
+      </div>
+
+      <div class="error" *ngFor="let error of errorMessages">{{error}}</div>
+
+      <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary">Ok</button>
+        <button type="button" class="btn btn-danger">Cancel</button>
+      </div>
+
+    </form>
+  </div>
+</div>

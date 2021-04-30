@@ -1,0 +1,17 @@
+<h1>Events List</h1>
+
+<table class='table table-striped'>
+  <tr *ngFor="let poi of pois">
+    <td>{{ poi.poiId }}</td>
+    <td>{{ poi.deviceName }}</td>
+    <td>{{ poi.timestamp }}</td>
+    <td>{{ poi.trackLocation }} </td>
+    <td>{{ poi.direction }}</td>
+    <td>{{ poi.speed }}</td>
+    <td>{{ poi.poiCode }}</td>
+    <td>{{ poi.poiValue }}</td>
+    <td><a href="">View</a></td>
+    <td><a href="">Download</a></td>
+    <td><a href="">Group</a></td>
+  </tr>
+</table>
