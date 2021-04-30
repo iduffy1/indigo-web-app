@@ -1,17 +1,35 @@
 <h1>Events List</h1>
 
-<table class='table table-striped'>
-  <tr *ngFor="let poi of pois">
-    <td>{{ poi.poiId }}</td>
-    <td>{{ poi.deviceName }}</td>
-    <td>{{ poi.timestamp }}</td>
-    <td>{{ poi.trackLocation }} </td>
-    <td>{{ poi.direction }}</td>
-    <td>{{ poi.speed }}</td>
-    <td>{{ poi.poiCode }}</td>
-    <td>{{ poi.poiValue }}</td>
-    <td><a href="">View</a></td>
-    <td><a href="">Download</a></td>
-    <td><a href="">Group</a></td>
-  </tr>
-</table>
+<button (click)="openSearchFilter()">Search</button>
+
+<div [hidden]="!pois">
+  <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortDirection="desc" matSortDisableClear
+    class='table table-striped'>
+    <tr>
+      <th mat-sort-header="poiId">EventID</th>
+      <!-- <th mat-sort-header="deviceName">Indigo</th> -->
+      <th mat-sort-header="timestamp">Date</th>
+      <th mat-sort-header="trackLocation">Location</th>
+      <th mat-sort-header="direction">Direction</th>
+      <th mat-sort-header="speed">Speed</th>
+      <th mat-sort-header="poiCode">Channel</th>
+      <th mat-sort-header="poiValue">Value</th>
+      <th>View</th>
+    </tr>
+    <tbody>
+      <tr *ngFor="let poi of sortedPois" [ngStyle]="getRowStyle(poi)">
+        <td>{{ poi.poiId }}</td>
+        <!-- <td>{{ poi.deviceName }}</td> -->
+        <td>{{ poi.timestamp }}</td>
+        <td>{{ poi.trackLocation }} </td>
+        <td>{{ poi.direction }}</td>
+        <td>{{ poi.speed }}</td>
+        <td>{{ poi.poiCode }}</td>
+        <td>{{ poi.poiValue }}</td>
+        <td><a href="">View</a></td>
+        <td><a href="">Download</a></td>
+        <td><a href="">Group</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

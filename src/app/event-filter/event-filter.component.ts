@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { EventFilter } from 'src/models/event-filter';
 import { IndigoDataService } from '../indigo-data.service';
+
 
 @Component({
   selector: 'app-event-filter',
@@ -19,8 +21,13 @@ export class EventFilterComponent implements OnInit {
   eventType : string;
 
   errorMessages : string[] = [];
+  isLoading = false;
 
-  constructor(private indigoDataService : IndigoDataService) {}
+  constructor(
+    public dialogRef: MatDialogRef<EventFilterComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {name : string},
+    private indigoDataService : IndigoDataService)
+   {}
 
   ngOnInit() : void {
     const dateTo = new Date();
@@ -35,8 +42,6 @@ export class EventFilterComponent implements OnInit {
       'direction' : new FormControl(''),
       'eventType' : new FormControl('')
     });
-
-
   }
 
   onSubmit() {
@@ -53,15 +58,25 @@ export class EventFilterComponent implements OnInit {
     console.log(eventFilter);
 
     this.errorMessages = [];
+    this.isLoading = true;
     this.indigoDataService.loadEventsFiltered(eventFilter)
       .subscribe({
-        next: result => {console.log(result);} ,
+        next: result => {
+          console.log(result);
+          this.isLoading = false;
+        } ,
         error: error => {
           this.errorMessages = error.split('\r\n') ;
-
+          this.isLoading = false;
         },
-        complete: () => {console.log("complete");}
+        complete: () => {
+          console.log("complete");
+          this.dialogRef.close();
+        }
       });
+  }
 
+  closeDialog() {
+    this.dialogRef.close();
   }
 }

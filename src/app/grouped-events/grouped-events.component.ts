@@ -14,13 +14,15 @@ import { GroupedEvent } from 'src/models/dto';
 export class GroupedEventsComponent implements OnInit, AfterViewInit {
   public groupedEvents: GroupedEvent[];
   public sortedGroupedEvents : GroupedEvent[];
+  @ViewChild(MatSort, { static: false }) matSort: MatSort;
+  private initialSort: Sort = { active: 'valueAtLastDate', direction: 'desc'};
+
 
   constructor(
     private http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) { }
-    @ViewChild(MatSort, { static: false }) matSort: MatSort;
 
-    private initialSort: Sort = { active: 'valueAtLastDate', direction: 'desc'};
+
 
 
   ngOnInit() {
