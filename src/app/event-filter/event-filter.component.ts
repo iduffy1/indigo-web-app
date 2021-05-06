@@ -25,23 +25,35 @@ export class EventFilterComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<EventFilterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {name : string},
+    @Inject(MAT_DIALOG_DATA) public data : EventFilter,
     private indigoDataService : IndigoDataService)
    {}
 
   ngOnInit() : void {
-    const dateTo = new Date();
-    const dateFrom = new Date(dateTo.getTime() - 90*86400*1000);
 
     this.form = new FormGroup({
-      'dateFrom' : new FormControl(dateFrom),
-      'dateTo' : new FormControl(dateTo),
-      'track' : new FormControl(),
-      'distFrom' : new FormControl(),
-      'distTo' : new FormControl(),
-      'direction' : new FormControl(''),
-      'eventType' : new FormControl('')
+      'dateFrom' : new FormControl(this.data.dateFrom),
+      'dateTo' : new FormControl(this.data.dateTo),
+      'track' : new FormControl(this.data.track),
+      'distFrom' : new FormControl(this.data.distFrom),
+      'distTo' : new FormControl(this.data.distTo),
+      'mileageDir' : new FormControl(this.data.mileageDir ?? ""),
+      'eventType' : new FormControl(this.data.eventType ?? "")
     });
+
+    this.indigoDataService.eventFilterResults.subscribe({
+      next: results => {
+        if (this.isLoading) {
+          if (results.errors) {
+            this.errorMessages = results.errors;
+            this.isLoading = false;
+          }
+          else {
+            this.dialogRef.close();
+          }
+        }
+      }
+    })
   }
 
   onSubmit() {
@@ -51,7 +63,7 @@ export class EventFilterComponent implements OnInit {
       track : this.form.get('track').value,
       distFrom : this.form.get('distFrom').value,
       distTo : this.form.get('distTo').value,
-      mileageDir : this.form.get('direction').value,
+      mileageDir : this.form.get('mileageDir').value,
       eventType : this.form.get('eventType').value
     }
 
@@ -59,21 +71,7 @@ export class EventFilterComponent implements OnInit {
 
     this.errorMessages = [];
     this.isLoading = true;
-    this.indigoDataService.loadEventsFiltered(eventFilter)
-      .subscribe({
-        next: result => {
-          console.log(result);
-          this.isLoading = false;
-        } ,
-        error: error => {
-          this.errorMessages = error.split('\r\n') ;
-          this.isLoading = false;
-        },
-        complete: () => {
-          console.log("complete");
-          this.dialogRef.close();
-        }
-      });
+    this.indigoDataService.loadEvents(eventFilter);
   }
 
   closeDialog() {

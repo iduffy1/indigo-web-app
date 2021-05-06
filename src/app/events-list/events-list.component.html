@@ -1,6 +1,16 @@
-<h1>Events List</h1>
+<div class="row">
+  <div class="col-md-8">
+    <h1>Events List</h1>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group float-right mt-2">
+      <button class="btn btn-primary" [routerLink]="" (click)="openSearchFilter()">
+        <i class="fa fa-search pr-2"></i>Filter</button>
+    </div>
+  </div>
+</div>
 
-<button (click)="openSearchFilter()">Search</button>
+<p *ngIf="!pois"><em>Loading...</em></p>
 
 <div [hidden]="!pois">
   <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortDirection="desc" matSortDisableClear
@@ -10,7 +20,7 @@
       <!-- <th mat-sort-header="deviceName">Indigo</th> -->
       <th mat-sort-header="timestamp">Date</th>
       <th mat-sort-header="trackLocation">Location</th>
-      <th mat-sort-header="direction">Direction</th>
+      <th mat-sort-header="mileageDir">Direction</th>
       <th mat-sort-header="speed">Speed</th>
       <th mat-sort-header="poiCode">Channel</th>
       <th mat-sort-header="poiValue">Value</th>
@@ -20,12 +30,12 @@
       <tr *ngFor="let poi of sortedPois" [ngStyle]="getRowStyle(poi)">
         <td>{{ poi.poiId }}</td>
         <!-- <td>{{ poi.deviceName }}</td> -->
-        <td>{{ poi.timestamp }}</td>
+        <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>
         <td>{{ poi.trackLocation }} </td>
-        <td>{{ poi.direction }}</td>
+        <td>{{ poi.mileageDir }}</td>
         <td>{{ poi.speed }}</td>
         <td>{{ poi.poiCode }}</td>
-        <td>{{ poi.poiValue }}</td>
+        <td>{{ poi.poiValue | number:"1.0-0" }}</td>
         <td><a href="">View</a></td>
         <td><a href="">Download</a></td>
         <td><a href="">Group</a></td>

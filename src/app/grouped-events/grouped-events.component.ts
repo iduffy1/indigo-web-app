@@ -2,6 +2,10 @@ import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/co
 import { HttpClient } from '@angular/common/http';
 import { MatSort, Sort } from '@angular/material/sort';
 import { GroupedEvent } from 'src/models/dto';
+import { IndigoDataService } from '../indigo-data.service';
+import { GroupedEventFilter, GroupedEventFilter_ForRecentDays } from 'src/models/grouped-event-filter';
+import { MatDialog } from '@angular/material/dialog';
+import { GroupedEventFilterComponent } from '../grouped-event-filter/grouped-event-filter.component';
 
 
 
@@ -15,15 +19,17 @@ export class GroupedEventsComponent implements OnInit, AfterViewInit {
   public groupedEvents: GroupedEvent[];
   public sortedGroupedEvents : GroupedEvent[];
   @ViewChild(MatSort, { static: false }) matSort: MatSort;
-  private initialSort: Sort = { active: 'valueAtLastDate', direction: 'desc'};
+  private currentSort: Sort = { active: 'valueAtLastDate', direction: 'desc'};
 
+  private defaultInitialFilter : GroupedEventFilter = GroupedEventFilter_ForRecentDays(90);
+  private currentFilter : GroupedEventFilter = this.defaultInitialFilter;
 
   constructor(
     private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) { }
-
-
-
+    @Inject('BASE_URL') private baseUrl: string,
+    private indigoDataService : IndigoDataService,
+    public dialog: MatDialog
+   ) { }
 
   ngOnInit() {
   }
@@ -31,38 +37,54 @@ export class GroupedEventsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // Load the data and apply initial sort.
     // Can only access MatSort after ViewInit so fetch the data here to guarantee matSort is available when data returns
-    this.http.get<GroupedEvent[]>(this.baseUrl + 'api/groups/90').subscribe(result => {
-      this.groupedEvents = result;
-      this.matSort.sort({ id: this.initialSort.active, start: 'desc', disableClear: true});
-    }, error => console.error(error));
+
+    this.indigoDataService.groupedEventFilterResults.subscribe({
+      next : result => {
+        if (!result) {
+          console.log("About to fetch default grouped events");
+          this.indigoDataService.loadGroupedEvents(this.defaultInitialFilter);
+        }
+        else if (result.data) {
+          this.groupedEvents = result.data
+          this.currentFilter = result.filter;
+          this.sortData(this.currentSort);
+          //          this.matSort.sort({ id: this.initialSort.active, start: 'desc', disableClear: true});
+        }
+      }
+    });
   }
 
 
   // Called by MatSort to apply a sort to the data
   sortData(sort: Sort) {
+    if (!this.groupedEvents) {
+      console.log("no grouped event data yet");
+      this.sortedGroupedEvents = [];
+      return;
+    }
+
+    this.currentSort = sort;
     const data = this.groupedEvents.slice();
     if (!sort.active || sort.direction === '') {
       this.sortedGroupedEvents = data;
       return;
     }
-    this.sortedGroupedEvents = this.sortDataByColumn(data, sort);
+    this.sortedGroupedEvents = data.sort((a,b) => this.compareByColumn(a, b, sort));
   }
 
-  sortDataByColumn(data: GroupedEvent[], sort: Sort) : GroupedEvent[] {
+  compareByColumn(a : GroupedEvent, b : GroupedEvent, sort : Sort) {
     const isAsc =  sort.direction === 'asc';
-    return this.groupedEvents.sort((a, b) => {
-      switch (sort.active) {
-        case 'latestPoiDate': return compare(a.latestPoiDate, b.latestPoiDate, isAsc);
-        case 'trackLocation': return compare(a.trackLocation, b.trackLocation, isAsc);
-        case 'direction': return compare(a.milesDir, b.milesDir, isAsc);
-        case 'numPois': return compare(a.numPois, b.numPois, isAsc);
-        case 'poiCode': return compare(a.poiCode, b.poiCode, isAsc);
-        case 'gradient': return compare(a.trendLine.gradient, b.trendLine.gradient, isAsc);
-        case 'valueAtLastDate': return compare(a.trendLine.valueAtLastDate, b.trendLine.valueAtLastDate, isAsc);
-        case 'daysSinceLastDate': return compare(a.trendLine.daysSinceLastDate, b.trendLine.daysSinceLastDate, isAsc);
-        default: return 0;
-      }
-    });
+    switch (sort.active) {
+      case 'latestPoiDate': return compare(a.latestPoiDate, b.latestPoiDate, isAsc);
+      case 'trackLocation': return compare(a.trackLocation, b.trackLocation, isAsc);
+      case 'mileageDir': return compare(a.mileageDir, b.mileageDir, isAsc);
+      case 'numPois': return compare(a.numPois, b.numPois, isAsc);
+      case 'poiCode': return compare(a.poiCode, b.poiCode, isAsc);
+      case 'gradient': return compare(a.trendLine.gradient, b.trendLine.gradient, isAsc);
+      case 'valueAtLastDate': return compare(a.trendLine.valueAtLastDate, b.trendLine.valueAtLastDate, isAsc);
+      case 'daysSinceLastDate': return compare(a.trendLine.daysSinceLastDate, b.trendLine.daysSinceLastDate, isAsc);
+      default: return 0;
+    }
   }
 
   getRowStyle(ge : GroupedEvent) {
@@ -77,10 +99,16 @@ export class GroupedEventsComponent implements OnInit, AfterViewInit {
     return {};
   }
 
+  openSearchFilter() {
+    const dialogRef = this.dialog.open(GroupedEventFilterComponent, {
+      width: '800px',
+      data: this.currentFilter
+    });
+  }
+
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
-
 

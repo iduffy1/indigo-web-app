@@ -7,6 +7,9 @@ import { RouterModule } from '@angular/router';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
+import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+
+
 import { AppComponent } from './app.component';
 import { CounterComponent } from './counter/counter.component';
 import { DashBoardComponent } from './dashboard/dashboard.component';
@@ -23,6 +26,7 @@ import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { AuthorizeInterceptor } from 'src/api-authorization/authorize.interceptor';
 import { AngularMaterialModule } from './angular-material.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { GroupedEventFilterComponent } from './grouped-event-filter/grouped-event-filter.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +39,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     OlMapComponent,
     MapPageComponent,
     DashBoardComponent,
-    EventFilterComponent
+    EventFilterComponent,
+    GroupedEventFilterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -53,7 +58,8 @@ import { MatDialogModule } from '@angular/material/dialog';
       { path: 'dash', component: DashBoardComponent }
   //    { path: 'event-filter', component: EventFilterComponent }
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FontAwesomeModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },

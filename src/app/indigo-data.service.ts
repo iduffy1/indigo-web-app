@@ -1,61 +1,50 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { BehaviorSubject, Observable } from "rxjs";
-import { tap } from "rxjs/operators";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { catchError, map, tap } from "rxjs/operators";
 import { GroupedEvent, Poi } from "src/models/dto";
-import { EventFilter } from "src/models/event-filter";
+import { EventFilter, EventFilterResults, EventFilter_ForRecentDays } from "src/models/event-filter";
+import { GroupedEventFilter, GroupedEventFilterResults } from "src/models/grouped-event-filter";
+import { EventFilterComponent } from "./event-filter/event-filter.component";
 
 @Injectable({providedIn: 'root'})
 export class IndigoDataService {
   constructor (
     private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) {}
+    @Inject('BASE_URL') private baseUrl: string) {
 
-  private pois : Poi[] = [];
-  poisChanged = new BehaviorSubject<Poi[]>([]);
+    }
 
-  private groupedEvents : GroupedEvent[] = [];
-  groupedEventsChanged = new BehaviorSubject<GroupedEvent[]>([]);
+  eventFilterResults = new BehaviorSubject<EventFilterResults>(null);
 
 
-
-  loadEvents() {
-    this.http.get<Poi[]>(this.baseUrl + 'api/events/90').subscribe(result => {
-      this.pois = result;
-      this.poisChanged.next(this.pois);
-    }, error => console.error(error));
+  loadEvents(filter : EventFilter) {
+    this.http.post<Poi[]>(
+      this.baseUrl + 'api/events/query', { filter: filter, page: {skip:0, take:200} })
+      .subscribe({
+        next: result => {
+          this.eventFilterResults.next({ filter: filter, data : result });
+        },
+        error: error => {
+          this.eventFilterResults.next({ filter: filter, errors : error.split('\r\n')});
+        }
+      });
   }
 
-  loadEventsFiltered(eventFilter : EventFilter) : Observable<Poi[]> {
-    return this.http.post<Poi[]>(
-      this.baseUrl + 'api/events/query', { query: eventFilter, page: {skip:0, take:100000} })
-      .pipe(
-        tap({
-          next: result => {
-            this.pois = result;
-            this.poisChanged.next(this.pois);
-          },
-          error: error => console.error(error)
-        })
-      );
+  groupedEventFilterResults = new BehaviorSubject<GroupedEventFilterResults>(null);
+
+
+  loadGroupedEvents(filter : GroupedEventFilter) {
+    this.http.post<GroupedEvent[]>(
+      this.baseUrl + 'api/groups/query', { filter: filter, page: {skip:0, take:200} })
+      .subscribe({
+        next: result => {
+          this.groupedEventFilterResults.next({ filter: filter, data : result });
+        },
+        error: error => {
+          this.groupedEventFilterResults.next({ filter: filter, errors : error.split('\r\n')});
+        }
+      });
   }
-
-  loadEventGroups() : Observable<GroupedEvent[]> {
-    return this.http.get<GroupedEvent[]>(this.baseUrl + 'api/groups/90')
-      .pipe(
-        tap({
-          next: result => {
-            this.groupedEvents = result;
-            this.groupedEventsChanged.next(this.groupedEvents);
-          },
-          error: error => {
-            console.log("Error getting results of http");
-            console.error(error);
-          }
-        })
-      );
-  }
-
-
 
 }

@@ -1,4 +1,14 @@
-<h1>Grouped Events</h1>
+<div class="row">
+  <div class="col-md-8">
+    <h1>Grouped Events</h1>
+  </div>
+  <div class="col-md-4">
+    <div class="btn-group float-right mt-2">
+      <button class="btn btn-primary" [routerLink]="" (click)="openSearchFilter()">
+        <i class="fa fa-search pr-2"></i>Filter</button>
+    </div>
+  </div>
+</div>
 
 <p *ngIf="!sortedGroupedEvents"><em>Loading...</em></p>
 
@@ -8,7 +18,7 @@
     <tr>
       <th mat-sort-header="latestPoiDate">Date</th>
       <th mat-sort-header="trackLocation">Location</th>
-      <th mat-sort-header="direction">Direction</th>
+      <th mat-sort-header="mileageDir">Direction</th>
       <th mat-sort-header="numPois">Events</th>
       <th mat-sort-header="poiCode">Channel</th>
       <th mat-sort-header="gradient">Trend Gradient</th>
@@ -20,7 +30,7 @@
       <tr *ngFor="let ge of sortedGroupedEvents" [ngStyle]="getRowStyle(ge)">
         <td>{{ ge.latestPoiDate }}</td>
         <td>{{ ge.trackLocation }} </td>
-        <td>{{ ge.milesDir }}</td>
+        <td>{{ ge.mileageDir }}</td>
         <td>{{ ge.numPois }}</td>
         <td>{{ ge.poiCode }}</td>
         <td>{{ ge.trendLine.gradient | number: '1.2-2'}}</td>

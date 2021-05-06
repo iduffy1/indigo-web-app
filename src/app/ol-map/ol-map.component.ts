@@ -14,6 +14,7 @@ import VectorSource from 'ol/source/Vector';
 import { Fill, Stroke, Circle, Style, Text } from 'ol/style';
 
 import { GroupedEvent, Poi } from 'src/models/dto';
+import { EventFilter_ForRecentDays } from 'src/models/event-filter';
 import { IndigoDataService } from '../indigo-data.service';
 
 @Component({
@@ -93,16 +94,16 @@ export class OlMapComponent implements  AfterViewInit {
     console.log('OnMap Ready');
     console.log(e);
 
-    this.indigoDataService.poisChanged.subscribe({
-      next: (pois) => this.setEventsLayer(pois)
+    this.indigoDataService.eventFilterResults.subscribe({
+      next: (results) => { if (results?.data) this.setEventsLayer(results.data); }
     });
 
-    this.indigoDataService.groupedEventsChanged.subscribe({
+    this.indigoDataService.groupedEventFilterResults.subscribe({
       next: (groupedEvents) => this.setGroupedEventsLayer(groupedEvents)
     })
 
-    this.indigoDataService.loadEvents();
-    this.indigoDataService.loadEventGroups();
+   // TODO Look at this.
+   // this.indigoDataService.loadEventGroups();
   }
 
   createTrackLayer() {
