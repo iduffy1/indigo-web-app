@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subscription } from 'rxjs';
 import { EventFilter } from 'src/models/event-filter';
 import { IndigoDataService } from '../indigo-data.service';
 
@@ -10,7 +11,7 @@ import { IndigoDataService } from '../indigo-data.service';
   templateUrl: './event-filter.component.html',
   styleUrls: ['./event-filter.component.css']
 })
-export class EventFilterComponent implements OnInit {
+export class EventFilterComponent implements OnInit, OnDestroy {
   form : FormGroup;
   dateFrom : string;
   dateTo : string;
@@ -22,6 +23,8 @@ export class EventFilterComponent implements OnInit {
 
   errorMessages : string[] = [];
   isLoading = false;
+
+  subscription : Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<EventFilterComponent>,
@@ -41,7 +44,7 @@ export class EventFilterComponent implements OnInit {
       'eventType' : new FormControl(this.data.eventType ?? "")
     });
 
-    this.indigoDataService.eventFilterResults.subscribe({
+    this.subscription = this.indigoDataService.eventFilterResults$.subscribe({
       next: results => {
         if (this.isLoading) {
           if (results.errors) {
@@ -54,6 +57,10 @@ export class EventFilterComponent implements OnInit {
         }
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onSubmit() {

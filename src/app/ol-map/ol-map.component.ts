@@ -1,4 +1,4 @@
-import {Component, NgZone, AfterViewInit, Output, Input, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import {Component, NgZone, AfterViewInit, Output, Input, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
 
 import {View, Map, Feature } from 'ol';
 import { ScaleLine, defaults as DefaultControls} from 'ol/control';
@@ -12,6 +12,7 @@ import Projection from 'ol/proj/Projection';
 import OSM from 'ol/source/OSM';
 import VectorSource from 'ol/source/Vector';
 import { Fill, Stroke, Circle, Style, Text } from 'ol/style';
+import { Subscription } from 'rxjs';
 
 import { GroupedEvent, Poi } from 'src/models/dto';
 import { EventFilter_ForRecentDays } from 'src/models/event-filter';
@@ -22,7 +23,7 @@ import { IndigoDataService } from '../indigo-data.service';
   templateUrl: './ol-map.component.html',
   styleUrls: ['./ol-map.component.scss']
 })
-export class OlMapComponent implements  AfterViewInit {
+export class OlMapComponent implements  AfterViewInit, OnDestroy {
 
   @Input() center: Coordinate;
   @Input() zoom: number;
@@ -39,6 +40,8 @@ export class OlMapComponent implements  AfterViewInit {
   public pois: Poi[];
   public groupedEvents : GroupedEvent[];
 
+  subscriptions : Subscription[] = [];
+
   constructor(
     private zone: NgZone,
     private cd: ChangeDetectorRef,
@@ -50,6 +53,12 @@ export class OlMapComponent implements  AfterViewInit {
       this.zone.runOutsideAngular(() => this.initMap())
     }
     setTimeout(()=>this.mapReady.emit(this.Map));
+  }
+
+  ngOnDestroy() : void {
+    for (const sub of this.subscriptions) {
+      sub.unsubscribe();
+    }
   }
 
   private initMap(): void{
@@ -94,13 +103,13 @@ export class OlMapComponent implements  AfterViewInit {
     console.log('OnMap Ready');
     console.log(e);
 
-    this.indigoDataService.eventFilterResults.subscribe({
+    this.subscriptions.push(this.indigoDataService.eventFilterResults$.subscribe({
       next: (result) => { if (result?.data) this.setEventsLayer(result.data); }
-    });
+    }));
 
-    this.indigoDataService.groupedEventFilterResults.subscribe({
+    this.subscriptions.push(this.indigoDataService.groupedEventFilterResults$.subscribe({
       next: (result) => { if (result?.data) this.setGroupedEventsLayer(result.data) }
-    })
+    }));
 
   }
 

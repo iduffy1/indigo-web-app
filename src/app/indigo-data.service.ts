@@ -1,50 +1,90 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { catchError, map, tap } from "rxjs/operators";
+import { catchError, map, shareReplay, switchMap, tap } from "rxjs/operators";
 import { GroupedEvent, Poi } from "src/models/dto";
-import { EventFilter, EventFilterResults, EventFilter_ForRecentDays } from "src/models/event-filter";
-import { GroupedEventFilter, GroupedEventFilterResults } from "src/models/grouped-event-filter";
+import {
+  EventFilter,
+  EventFilterResults,
+  EventFilter_ForRecentDays,
+} from "src/models/event-filter";
+import {
+  GroupedEventFilter,
+  GroupedEventFilterResults,
+  GroupedEventFilter_ForRecentDays,
+} from "src/models/grouped-event-filter";
 import { EventFilterComponent } from "./event-filter/event-filter.component";
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: "root" })
 export class IndigoDataService {
-  constructor (
+  constructor(
     private http: HttpClient,
-    @Inject('BASE_URL') private baseUrl: string) {
+    @Inject("BASE_URL") private baseUrl: string
+  ) {}
 
-    }
+  private eventFilter$ = new BehaviorSubject<EventFilter>(
+    EventFilter_ForRecentDays(90)
+  );
 
-  eventFilterResults = new BehaviorSubject<EventFilterResults>(null);
-
-
-  loadEvents(filter : EventFilter) {
-    this.http.post<Poi[]>(
-      this.baseUrl + 'api/events/query', { filter: filter, page: {skip:0, take:200} })
-      .subscribe({
-        next: result => {
-          this.eventFilterResults.next({ filter: filter, data : result });
-        },
-        error: error => {
-          this.eventFilterResults.next({ filter: filter, errors : error.split('\r\n')});
-        }
-      });
+  loadEvents(filter: EventFilter) {
+    this.eventFilter$.next(filter);
   }
 
-  groupedEventFilterResults = new BehaviorSubject<GroupedEventFilterResults>(null);
+  eventFilterResults$ = this.eventFilter$.pipe(
+    switchMap((filter) => {
+      console.log("New event filter:");
+      console.log(filter);
+      return this.http
+        .post<Poi[]>(this.baseUrl + "api/events/query", {
+          filter: filter,
+          page: { skip: 0, take: 200 },
+        })
+        .pipe(
+          map(
+            (result): EventFilterResults => {
+              return { filter: filter, data: result };
+            }
+          ),
+          catchError(
+            (error): Observable<EventFilterResults> => {
+              return of({ filter: filter, errors: error.split("\r\n") });
+            }
+          )
+        );
+    }),
+    shareReplay(1)
+  );
 
+  private groupedEventFilter$ = new BehaviorSubject<GroupedEventFilter>(
+    GroupedEventFilter_ForRecentDays(90)
+  );
 
-  loadGroupedEvents(filter : GroupedEventFilter) {
-    this.http.post<GroupedEvent[]>(
-      this.baseUrl + 'api/groups/query', { filter: filter, page: {skip:0, take:200} })
-      .subscribe({
-        next: result => {
-          this.groupedEventFilterResults.next({ filter: filter, data : result });
-        },
-        error: error => {
-          this.groupedEventFilterResults.next({ filter: filter, errors : error.split('\r\n')});
-        }
-      });
+  loadGroupedEvents(filter: GroupedEventFilter) {
+    this.groupedEventFilter$.next(filter);
   }
 
+  groupedEventFilterResults$ = this.groupedEventFilter$.pipe(
+    switchMap((filter) => {
+      console.log("New grouped event filter:");
+      console.log(filter);
+      return this.http
+        .post<GroupedEvent[]>(this.baseUrl + "api/groups/query", {
+          filter: filter,
+          page: { skip: 0, take: 200 },
+        })
+        .pipe(
+          map(
+            (result): GroupedEventFilterResults => {
+              return { filter: filter, data: result };
+            }
+          ),
+          catchError(
+            (error): Observable<GroupedEventFilterResults> => {
+              return of({ filter: filter, errors: error.split("\r\n") });
+            }
+          )
+        );
+    }),
+    shareReplay(1)
+  );
 }

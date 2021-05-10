@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatSort, Sort } from '@angular/material/sort';
 import { GroupedEvent } from 'src/models/dto';
@@ -6,6 +6,7 @@ import { IndigoDataService } from '../indigo-data.service';
 import { GroupedEventFilter, GroupedEventFilter_ForRecentDays } from 'src/models/grouped-event-filter';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupedEventFilterComponent } from '../grouped-event-filter/grouped-event-filter.component';
+import { Subscription } from 'rxjs';
 
 
 
@@ -15,7 +16,7 @@ import { GroupedEventFilterComponent } from '../grouped-event-filter/grouped-eve
   styleUrls: ['./grouped-events.component.css']
 })
 
-export class GroupedEventsComponent implements OnInit, AfterViewInit {
+export class GroupedEventsComponent implements OnInit, AfterViewInit, OnDestroy {
   public groupedEvents: GroupedEvent[];
   public sortedGroupedEvents : GroupedEvent[];
   @ViewChild(MatSort, { static: false }) matSort: MatSort;
@@ -23,6 +24,8 @@ export class GroupedEventsComponent implements OnInit, AfterViewInit {
 
   private defaultInitialFilter : GroupedEventFilter = GroupedEventFilter_ForRecentDays(90);
   private currentFilter : GroupedEventFilter = this.defaultInitialFilter;
+
+  private subscription : Subscription;
 
   constructor(
     private http: HttpClient,
@@ -38,20 +41,19 @@ export class GroupedEventsComponent implements OnInit, AfterViewInit {
     // Load the data and apply initial sort.
     // Can only access MatSort after ViewInit so fetch the data here to guarantee matSort is available when data returns
 
-    this.indigoDataService.groupedEventFilterResults.subscribe({
+    this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe({
       next : result => {
-        if (!result) {
-          console.log("About to fetch default grouped events");
-          this.indigoDataService.loadGroupedEvents(this.defaultInitialFilter);
-        }
-        else if (result.data) {
+        if (result?.data) {
           this.groupedEvents = result.data
           this.currentFilter = result.filter;
           this.sortData(this.currentSort);
-          //          this.matSort.sort({ id: this.initialSort.active, start: 'desc', disableClear: true});
         }
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 

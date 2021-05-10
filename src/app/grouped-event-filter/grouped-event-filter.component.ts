@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { EventFilter } from 'src/models/event-filter';
+import { Subscription } from 'rxjs';
+
 import { GroupedEventFilter } from 'src/models/grouped-event-filter';
 import { IndigoDataService } from '../indigo-data.service';
 
@@ -11,7 +12,7 @@ import { IndigoDataService } from '../indigo-data.service';
   templateUrl: './grouped-event-filter.component.html',
   styleUrls: ['./grouped-event-filter.component.css']
 })
-export class GroupedEventFilterComponent implements OnInit {
+export class GroupedEventFilterComponent implements OnInit, OnDestroy {
   form : FormGroup;
   dateFrom : string;
   dateTo : string;
@@ -23,6 +24,8 @@ export class GroupedEventFilterComponent implements OnInit {
 
   errorMessages : string[] = [];
   isLoading = false;
+
+  subscription : Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<GroupedEventFilterComponent>,
@@ -49,7 +52,7 @@ export class GroupedEventFilterComponent implements OnInit {
       'tlValueMin' : new FormControl(this.data.tlValueMin, [NumberValidator])
     });
 
-    this.indigoDataService.groupedEventFilterResults.subscribe({
+    this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe({
       next: results => {
         if (this.isLoading) {
           if (results.errors) {
@@ -62,6 +65,10 @@ export class GroupedEventFilterComponent implements OnInit {
         }
       }
     })
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onSubmit() {
