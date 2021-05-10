@@ -9,7 +9,8 @@ import { EventFilter, EventFilter_ForRecentDays } from 'src/models/event-filter'
 
 @Component({
   selector: 'app-events-list',
-  templateUrl: './events-list.component.html'
+  templateUrl: './events-list.component.html',
+  styleUrls: ['./events-list.component.css']
 })
 export class EventsListComponent implements OnInit, AfterViewInit {
   public pois: Poi[];

@@ -95,15 +95,13 @@ export class OlMapComponent implements  AfterViewInit {
     console.log(e);
 
     this.indigoDataService.eventFilterResults.subscribe({
-      next: (results) => { if (results?.data) this.setEventsLayer(results.data); }
+      next: (result) => { if (result?.data) this.setEventsLayer(result.data); }
     });
 
     this.indigoDataService.groupedEventFilterResults.subscribe({
-      next: (groupedEvents) => this.setGroupedEventsLayer(groupedEvents)
+      next: (result) => { if (result?.data) this.setGroupedEventsLayer(result.data) }
     })
 
-   // TODO Look at this.
-   // this.indigoDataService.loadEventGroups();
   }
 
   createTrackLayer() {
