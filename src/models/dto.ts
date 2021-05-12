@@ -35,3 +35,7 @@ export interface GroupedEvent {
   latestPoiDate : string;
   trendLine : TrendLine;
 }
+
+export interface GroupedEventDetails extends GroupedEvent {
+  pois : Poi[];
+}

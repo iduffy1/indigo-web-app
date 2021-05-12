@@ -11,7 +11,7 @@
 <p *ngIf="!pois"><em>Loading...</em></p>
 
 <div [hidden]="!pois">
-  <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortDirection="desc" matSortDisableClear
+  <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortActive="timestamp" matSortDirection="desc" matSortDisableClear
     class='table table-striped'>
     <tr>
       <th mat-sort-header="poiId">EventID</th>

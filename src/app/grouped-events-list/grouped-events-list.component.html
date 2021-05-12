@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="d-flex justify-content-between">
+        <h1>Grouped Events</h1>
+        <div class="btn-group float-right mt-2">
+            <button class="btn btn-primary" [routerLink]="" (click)="openSearchFilter()">
+                <i class="fa fa-search"></i>Filter</button>
+        </div>
+    </div>
+</div>
+
+<p *ngIf="!sortedGroupedEvents"><em>Loading...</em></p>
+
+<div [hidden]="!sortedGroupedEvents">
+    <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortActive="valueAtLastDate" matSortDirection="desc" matSortDisableClear
+        class='table table-striped'>
+        <tr>
+            <th mat-sort-header="latestPoiDate">Date</th>
+            <th mat-sort-header="trackLocation">Location</th>
+            <th mat-sort-header="mileageDir">Direction</th>
+            <th mat-sort-header="numPois">Events</th>
+            <th mat-sort-header="poiCode">Channel</th>
+            <th mat-sort-header="gradient">Trend Gradient</th>
+            <th mat-sort-header="valueAtLastDate">Trend Latest</th>
+            <th mat-sort-header="daysSinceLastDate">Age (days)</th>
+            <th>View</th>
+        </tr>
+        <tbody>
+            <tr *ngFor="let ge of sortedGroupedEvents" [ngStyle]="getRowStyle(ge)">
+                <td>{{ ge.latestPoiDate }}</td>
+                <td>{{ ge.trackLocation }} </td>
+                <td>{{ ge.mileageDir }}</td>
+                <td>{{ ge.numPois }}</td>
+                <td>{{ ge.poiCode }}</td>
+                <td>{{ ge.trendLine.gradient | number: '1.2-2'}}</td>
+                <td>{{ ge.trendLine.valueAtLastDate | number: '1.0-0' }}</td>
+                <td>{{ ge.trendLine.daysSinceLastDate }}</td>
+                <td><a [routerLink]="['/group', ge.poiId]">View</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -7,16 +7,15 @@ import { RouterModule } from '@angular/router';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
-import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 import { AppComponent } from './app.component';
-import { CounterComponent } from './counter/counter.component';
 import { DashBoardComponent } from './dashboard/dashboard.component';
 import { EventFilterComponent } from './event-filter/event-filter.component';
 import { EventsListComponent } from './events-list/events-list.component';
 import { ErrorInterceptor } from './error.interceptor';
-import { GroupedEventsComponent } from './grouped-events/grouped-events.component';
+import { GroupedEventsListComponent } from './grouped-events-list/grouped-events-list.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { MapPageComponent } from './ol-map/map-page/map-page.component';
@@ -27,20 +26,25 @@ import { AuthorizeInterceptor } from 'src/api-authorization/authorize.intercepto
 import { AngularMaterialModule } from './angular-material.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { GroupedEventFilterComponent } from './grouped-event-filter/grouped-event-filter.component';
+import { GroupedEventDetailsPageComponent } from './grouped-event-details-page/grouped-event-details-page.component';
+import { GroupedEventDetailsListComponent } from './grouped-event-details-list/grouped-event-details-list.component';
+import { GroupedEventDetailsChartComponent } from './grouped-event-details-chart/grouped-event-details-chart.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     EventsListComponent,
-    GroupedEventsComponent,
+    GroupedEventsListComponent,
     OlMapComponent,
     MapPageComponent,
     DashBoardComponent,
     EventFilterComponent,
-    GroupedEventFilterComponent
+    GroupedEventFilterComponent,
+    GroupedEventDetailsListComponent,
+    GroupedEventDetailsChartComponent,
+    GroupedEventDetailsPageComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -53,10 +57,10 @@ import { GroupedEventFilterComponent } from './grouped-event-filter/grouped-even
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'events', component: EventsListComponent },
-      { path: 'groups', component: GroupedEventsComponent },
+      { path: 'groups', component: GroupedEventsListComponent },
       { path: 'map', component: MapPageComponent },
-      { path: 'dash', component: DashBoardComponent }
-  //    { path: 'event-filter', component: EventFilterComponent }
+      { path: 'dash', component: DashBoardComponent },
+      { path: 'group/:id', component: GroupedEventDetailsPageComponent }
     ]),
     BrowserAnimationsModule,
     FontAwesomeModule
