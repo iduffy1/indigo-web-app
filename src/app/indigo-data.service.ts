@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
-import { catchError, map, shareReplay, switchMap, tap } from "rxjs/operators";
+import { catchError, map, shareReplay, switchMap } from "rxjs/operators";
 import { GroupedEvent, GroupedEventDetails, Poi } from "src/models/dto";
 import {
     EventFilter,
@@ -14,7 +14,6 @@ import {
     GroupedEventFilterResults,
     GroupedEventFilter_ForRecentDays,
 } from "src/models/grouped-event-filter";
-import { EventFilterComponent } from "./event-filter/event-filter.component";
 
 @Injectable({ providedIn: "root" })
 export class IndigoDataService {

@@ -1,97 +1,103 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Subscription } from 'rxjs';
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Subscription } from "rxjs";
 
-import { GroupedEventFilter } from 'src/models/grouped-event-filter';
-import { IndigoDataService } from '../indigo-data.service';
-
+import { GroupedEventFilter } from "src/models/grouped-event-filter";
+import { IndigoDataService } from "../indigo-data.service";
 
 @Component({
-  selector: 'app-grouped-event-filter',
-  templateUrl: './grouped-event-filter.component.html',
-  styleUrls: ['./grouped-event-filter.component.css']
+    selector: "app-grouped-event-filter",
+    templateUrl: "./grouped-event-filter.component.html",
+    styleUrls: ["./grouped-event-filter.component.css"],
 })
 export class GroupedEventFilterComponent implements OnInit, OnDestroy {
-  form : FormGroup;
-  dateFrom : string;
-  dateTo : string;
-  track : string;
-  distFrom : string;
-  distTo : string;
-  mileageDir : string;
-  eventType : string;
+    form: FormGroup;
+    dateFrom: string;
+    dateTo: string;
+    track: string;
+    distFrom: string;
+    distTo: string;
+    mileageDir: string;
+    eventType: string;
 
-  errorMessages : string[] = [];
-  isLoading = false;
+    errorMessages: string[] = [];
+    isLoading = false;
 
-  subscription : Subscription;
+    subscription: Subscription;
 
-  constructor(
-    public dialogRef: MatDialogRef<GroupedEventFilterComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: GroupedEventFilter,
-    private indigoDataService : IndigoDataService)
-   {
-     console.log("Grouped event filter ctor");
-   }
+    constructor(
+        public dialogRef: MatDialogRef<GroupedEventFilterComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: GroupedEventFilter,
+        private indigoDataService: IndigoDataService
+    ) {
+        console.log("Grouped event filter ctor");
+    }
 
-  ngOnInit() : void {
-    const NumberValidator = Validators.pattern('-?[0-9]*(\.?[0-9]+)?');
+    ngOnInit(): void {
+        const NumberValidator = Validators.pattern("-?[0-9]*(.?[0-9]+)?");
 
-    this.form = new FormGroup({
-      'event' : new FormGroup({
-        'dateFrom' : new FormControl(this.data.event.dateFrom),
-        'dateTo' : new FormControl(this.data.event.dateTo),
-        'track' : new FormControl(this.data.event.track),
-        'distFrom' : new FormControl(this.data.event.distFrom, [NumberValidator]),
-        'distTo' : new FormControl(this.data.event.distTo, [NumberValidator]),
-        'mileageDir' : new FormControl(this.data.event.mileageDir ?? ""),
-        'eventType' : new FormControl(this.data.event.eventType ?? "")
-      }),
-      'tlGradientMin' : new FormControl(this.data.tlGradientMin, [NumberValidator]),
-      'tlValueMin' : new FormControl(this.data.tlValueMin, [NumberValidator])
-    });
+        this.form = new FormGroup({
+            event: new FormGroup({
+                dateFrom: new FormControl(this.data.event.dateFrom),
+                dateTo: new FormControl(this.data.event.dateTo),
+                track: new FormControl(this.data.event.track),
+                distFrom: new FormControl(this.data.event.distFrom, [
+                    NumberValidator,
+                ]),
+                distTo: new FormControl(this.data.event.distTo, [
+                    NumberValidator,
+                ]),
+                mileageDir: new FormControl(this.data.event.mileageDir ?? ""),
+                eventType: new FormControl(this.data.event.eventType ?? ""),
+            }),
+            tlGradientMin: new FormControl(this.data.tlGradientMin, [
+                NumberValidator,
+            ]),
+            tlValueMin: new FormControl(this.data.tlValueMin, [
+                NumberValidator,
+            ]),
+        });
 
-    this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe({
-      next: results => {
-        if (this.isLoading) {
-          if (results.errors) {
-            this.errorMessages = results.errors;
-            this.isLoading = false;
-          }
-          else {
-            this.dialogRef.close();
-          }
-        }
-      }
-    })
-  }
+        this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe(
+            {
+                next: (results) => {
+                    if (this.isLoading) {
+                        if (results.errors) {
+                            this.errorMessages = results.errors;
+                            this.isLoading = false;
+                        } else {
+                            this.dialogRef.close();
+                        }
+                    }
+                },
+            }
+        );
+    }
 
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 
-  onSubmit() {
-    const groupedEventFilter = this.form.value;
+    onSubmit() {
+        const groupedEventFilter = this.form.value;
 
-    console.log(groupedEventFilter);
+        console.log(groupedEventFilter);
 
-    this.errorMessages = [];
-    this.isLoading = true;
-    this.indigoDataService.loadGroupedEvents(groupedEventFilter);
-  }
+        this.errorMessages = [];
+        this.isLoading = true;
+        this.indigoDataService.loadGroupedEvents(groupedEventFilter);
+    }
 
-  closeDialog() {
-    this.dialogRef.close();
-  }
+    closeDialog() {
+        this.dialogRef.close();
+    }
 
-  get getControl() {
-    return this.form.controls;
-  }
+    get getControl() {
+        return this.form.controls;
+    }
 
-  get getForm() {
-    return this.form;
-  }
-
-
+    get getForm() {
+        return this.form;
+    }
 }

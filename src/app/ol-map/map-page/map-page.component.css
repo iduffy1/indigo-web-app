@@ -1,17 +1,17 @@
 .map-page-container {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
 }
 
 .map-page-header {
-  flex: 0 1 auto;
+    flex: 0 1 auto;
 }
 
 .map-page-content {
-  flex: 1 1 auto;
+    flex: 1 1 auto;
 }
 
 .map-page-footer {
-  flex: 0 0 40px;
+    flex: 0 0 40px;
 }

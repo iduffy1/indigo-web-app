@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
+import { Component } from "@angular/core";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html'
+    selector: "app-root",
+    templateUrl: "./app.component.html",
 })
 export class AppComponent {
-  title = 'app';
+    title = "app";
 
-  onMapReady(e) {
-    console.log('Map ready');
-    console.log(e);
-  }
+    onMapReady(e) {
+        console.log("Map ready");
+        console.log(e);
+    }
 }

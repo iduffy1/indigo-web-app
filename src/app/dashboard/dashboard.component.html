@@ -1,11 +1,17 @@
 <div class="dash-container">
-  <div class="row h-100">
-    <div class="w-50 h-100">
-      <div class="row h-100">
-        <div class="col-md-12 events-list"><app-events-list></app-events-list></div>
-        <div class="col-md-12 grouped-events"><app-grouped-events></app-grouped-events></div>
-      </div>
+    <div class="row h-100">
+        <div class="w-50 h-100">
+            <div class="row h-100">
+                <div class="col-md-12 events-list">
+                    <app-events-list></app-events-list>
+                </div>
+                <div class="col-md-12 grouped-events">
+                    <app-grouped-events></app-grouped-events>
+                </div>
+            </div>
+        </div>
+        <div class="w-50">
+            <app-map-page class="map-page"></app-map-page>
+        </div>
     </div>
-    <div class="w-50"><app-map-page class="map-page"></app-map-page></div>
-  </div>
 </div>
