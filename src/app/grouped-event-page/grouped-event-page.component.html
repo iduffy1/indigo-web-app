@@ -1,0 +1,12 @@
+<h3>Grouped Data Details</h3>
+
+<div class="d-flex v-50">
+    <app-grouped-event-details [groupedEventDetails]='groupedEventDetails'></app-grouped-event-details>
+    <app-grouped-event-chart class="flex-grow-1" [groupedEventDetails]='groupedEventDetails'></app-grouped-event-chart>
+</div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <app-grouped-event-poi-list [groupedEventDetails]='groupedEventDetails'></app-grouped-event-poi-list>
+    </div>
+</div>

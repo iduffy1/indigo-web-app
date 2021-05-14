@@ -1,0 +1,24 @@
+<div class="detail-panel-container">
+    <div class="row detail-panel">
+        <p *ngIf="!groupedEventDetails"><em>Loading...</em></p>
+        <div class="col" *ngIf="groupedEventDetails">
+            <div class="detail-heading">GroupID</div>
+            <div class="detail-value">{{ groupedEventDetails.poiId }} </div>
+            <div class="detail-heading">GPS</div>
+            <div class="detail-value">{{ groupedEventDetails.location[0] | number:'0.0-6' }},
+                {{groupedEventDetails.location[1] | number:'0.0-6' }} </div>
+            <div class="detail-heading">Track Location</div>
+            <div class="detail-value">{{ groupedEventDetails.trackLocation }}</div>
+            <div class="detail-heading">Direction</div>
+            <div class="detail-value">{{ groupedEventDetails.mileageDir }}_</div>
+            <div class="detail-heading">Latest Event</div>
+            <div class="detail-value">{{ groupedEventDetails.latestPoiDate | date: 'yyyy-MM-dd' }} </div>
+            <div class="detail-heading">Event Count</div>
+            <div class="detail-value">{{ groupedEventDetails.numPois }} </div>
+            <div class="detail-heading">60d trend gradient</div>
+            <div class="detail-value">{{ groupedEventDetails.trendLine.gradient | number:'0.0-2' }} </div>
+            <div class="detail-heading">60d trend latest</div>
+            <div class="detail-value">{{ groupedEventDetails.trendLine.valueAtLastDate | number:'0.0-0' }}</div>
+        </div>
+    </div>
+</div>

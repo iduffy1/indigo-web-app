@@ -36,7 +36,7 @@
                 <td>{{ poi.poiValue | number:"1.0-0" }}</td>
                 <td><a href="">View</a></td>
                 <td><a href="">Download</a></td>
-                <td><a href="">Group</a></td>
+                <td><a [routerLink]="['/group', poi.poiId]">View</a></td>
             </tr>
         </tbody>
     </table>

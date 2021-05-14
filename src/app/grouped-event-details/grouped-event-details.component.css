@@ -1,0 +1,28 @@
+.detail-panel-container {
+    padding-top: 2rem;
+    height: 100%;
+    min-width: 240px;
+}
+
+.detail-panel {
+    border: 1px solid slategrey;
+    border-radius: 4px;
+    padding: .5rem;
+    margin: 0;
+    height: 100%;
+}
+
+.detail-heading {
+    font-weight: 700;
+    width: 150px;
+}
+
+.detail-value {
+    margin-left: 1.5rem;
+    margin-bottom: 0.3rem;
+}
+
+
+
+
+

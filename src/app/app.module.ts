@@ -25,9 +25,11 @@ import { AuthorizeInterceptor } from "src/api-authorization/authorize.intercepto
 import { AngularMaterialModule } from "./angular-material.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { GroupedEventFilterComponent } from "./grouped-event-filter/grouped-event-filter.component";
-import { GroupedEventDetailsPageComponent } from "./grouped-event-details-page/grouped-event-details-page.component";
-import { GroupedEventDetailsListComponent } from "./grouped-event-details-list/grouped-event-details-list.component";
-import { GroupedEventDetailsChartComponent } from "./grouped-event-details-chart/grouped-event-details-chart.component";
+import { GroupedEventPageComponent } from "./grouped-event-page/grouped-event-page.component";
+import { GroupedEventPoiListComponent } from "./grouped-event-poi-list/grouped-event-poi-list.component";
+import { GroupedEventChartComponent } from "./grouped-event-chart/grouped-event-chart.component";
+import { ChartsModule } from "ng2-charts";
+import { GroupedEventDetailsComponent } from './grouped-event-details/grouped-event-details.component';
 
 @NgModule({
     declarations: [
@@ -41,9 +43,10 @@ import { GroupedEventDetailsChartComponent } from "./grouped-event-details-chart
         DashBoardComponent,
         EventFilterComponent,
         GroupedEventFilterComponent,
-        GroupedEventDetailsListComponent,
-        GroupedEventDetailsChartComponent,
-        GroupedEventDetailsPageComponent,
+        GroupedEventPoiListComponent,
+        GroupedEventChartComponent,
+        GroupedEventPageComponent,
+        GroupedEventDetailsComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -59,10 +62,11 @@ import { GroupedEventDetailsChartComponent } from "./grouped-event-details-chart
             { path: "groups", component: GroupedEventsListComponent },
             { path: "map", component: MapPageComponent },
             { path: "dash", component: DashBoardComponent },
-            { path: "group/:id", component: GroupedEventDetailsPageComponent },
+            { path: "group/:id", component: GroupedEventPageComponent },
         ]),
         BrowserAnimationsModule,
         FontAwesomeModule,
+        ChartsModule
     ],
     providers: [
         {

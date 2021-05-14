@@ -4,10 +4,10 @@ import { GroupedEventDetails, Poi } from "src/models/dto";
 import { PoiSorting } from "../utils/poi-sorting";
 
 @Component({
-    selector: "app-grouped-event-details-list",
-    templateUrl: "./grouped-event-details-list.component.html",
+    selector: "app-grouped-event-poi-list",
+    templateUrl: "./grouped-event-poi-list.component.html",
 })
-export class GroupedEventDetailsListComponent implements OnChanges {
+export class GroupedEventPoiListComponent implements OnChanges {
     @Input() groupedEventDetails: GroupedEventDetails;
 
     sortedPois: Poi[];

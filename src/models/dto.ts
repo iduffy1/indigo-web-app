@@ -3,7 +3,7 @@ export interface Poi {
   poiId : number;
   timestamp : Date;
   deviceName : string;
-  location : string;
+  location : number[];
   speed : number;
   poiValue : number;
   poiCode : string;
@@ -12,12 +12,17 @@ export interface Poi {
   mileageDir : string;
 }
 
+export interface DateRange {
+    start : Date;
+    end : Date;
+}
+
 export interface TrendLine {
   dateRangeDays : number;
   targetDate : Date;
   gradient : number;
   offset : number;
-  actualDateRange : object;
+  actualDataRange : DateRange;
   daysSinceLastDate : number;
   valueAtLastDate : number;
   units : string;
@@ -32,7 +37,7 @@ export interface GroupedEvent {
   location: number[];
   mileageDir : string;
   numPois : number;
-  latestPoiDate : string;
+  latestPoiDate : Date;
   trendLine : TrendLine;
 }
 

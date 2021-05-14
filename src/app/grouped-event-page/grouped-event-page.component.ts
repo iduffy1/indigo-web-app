@@ -5,10 +5,10 @@ import { GroupedEventDetails } from "src/models/dto";
 import { IndigoDataService } from "../indigo-data.service";
 
 @Component({
-    selector: "app-grouped-event-details-page",
-    templateUrl: "./grouped-event-details-page.component.html",
+    selector: "app-grouped-event-page",
+    templateUrl: "./grouped-event-page.component.html",
 })
-export class GroupedEventDetailsPageComponent implements OnInit {
+export class GroupedEventPageComponent implements OnInit {
     private poiId: number;
     public groupedEventDetails: GroupedEventDetails;
 
