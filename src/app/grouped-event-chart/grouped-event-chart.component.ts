@@ -12,6 +12,9 @@ import { GroupedEventDetails } from "src/models/dto";
 export class GroupedEventChartComponent implements OnChanges {
     @Input() groupedEventDetails: GroupedEventDetails;
 
+    chartType: ChartType = 'scatter';
+    chartData: ChartDataSets[] = [];
+
     chartOptions: ChartOptions = {
         scales: {
             xAxes: [{
@@ -30,11 +33,9 @@ export class GroupedEventChartComponent implements OnChanges {
       };
 
       chartLabels: Label[] = [];
-      chartType: ChartType = 'scatter';
       chartLegend = true;
       chartPlugins = [];
 
-      chartData: ChartDataSets[] = [];
 
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -62,10 +63,10 @@ export class GroupedEventChartComponent implements OnChanges {
 
         // Create trend line
         //   Dates from .C# get converted to "/Date(1234567890123)/". Convert them to a Javascript Date
-        var mindate : Date = new Date(ged.trendLine.actualDataRange.start);
-        var maxdate : Date = new Date(ged.trendLine.actualDataRange.end);
-        var targetdate = new Date(ged.trendLine.targetDate);
-        var trendlinedata = [
+        const mindate : Date = new Date(ged.trendLine.actualDataRange.start);
+        const maxdate : Date = new Date(ged.trendLine.actualDataRange.end);
+        const targetdate = new Date(ged.trendLine.targetDate);
+        const trendlinedata = [
             { x: mindate, y: (mindate.getTime() - targetdate.getTime()) / 86400000 * ged.trendLine.gradient + ged.trendLine.offset },
             { x: maxdate, y: ged.trendLine.valueAtLastDate }
         ];

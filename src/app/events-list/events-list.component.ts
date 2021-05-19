@@ -18,6 +18,9 @@ import {
 } from "src/models/event-filter";
 import { Subscription } from "rxjs";
 import { PoiSorting } from "../utils/poi-sorting";
+import { SingleEventPageComponent } from "../single-event-page/single-event-page.component";
+import { SingleEventDialogComponent } from "../single-event-dialog/single-event-dialog.component";
+import { delay } from "rxjs/operators";
 
 @Component({
     selector: "app-events-list",
@@ -57,14 +60,27 @@ export class EventsListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        // this.matSort.sort({ id: this.currentSort.active, start: 'desc', disableClear: true});
-        this.subscription = this.indigoDataService.eventFilterResults$.subscribe(
+        console.log("afterViewInit called for event list component");
+
+        this.subscription = this.indigoDataService.eventFilterResults$
+            .pipe(
+                delay(1000)    // Delay updating the sort until after this event is handled.
+            ).subscribe(
             {
                 next: (result) => {
                     if (result?.data) {
                         this.pois = result.data;
                         this.currentFilter = result.filter;
-                        this.sortData(this.currentSort);
+                        // For the first sort only, let matSort do the sorting so it knows the
+                        // initial sort order and updates the arrows in the column headers correctly.
+                        // Otherwise, apply the sort ourselves directly because matSort.sort() will
+                        // toggle the sort direction. (Unknown reason)
+                        if (!this.sortedPois) {
+                            this.matSort.sort({ id: this.currentSort.active, start: 'desc', disableClear: true});
+                        }
+                        else {
+                            this.sortData(this.currentSort);
+                        }
                     }
                 },
             }
@@ -83,4 +99,11 @@ export class EventsListComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     getRowStyle(ge: Poi) {}
+
+    onViewClicked(poiId) {
+        const dialogRef = this.dialog.open(SingleEventDialogComponent, {
+            width: "800px",
+            data: poiId,
+        });
+    }
 }

@@ -11,6 +11,8 @@ export class PoiSorting {
         src : () => Poi[],
         callback : (( sortedPois : Poi[], sort : Sort) => void)) => {
         return (sort: Sort) => {
+            console.log("Sort function called");
+            console.log(sort);
             const pois : Poi[] = src();
             if (!pois) {
                 console.log("no data yet");

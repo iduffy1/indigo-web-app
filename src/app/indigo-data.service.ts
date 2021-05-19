@@ -14,6 +14,7 @@ import {
     GroupedEventFilterResults,
     GroupedEventFilter_ForRecentDays,
 } from "src/models/grouped-event-filter";
+import { PoiData } from "src/models/poiData";
 
 @Injectable({ providedIn: "root" })
 export class IndigoDataService {
@@ -57,6 +58,36 @@ export class IndigoDataService {
         }),
         shareReplay(1)
     );
+
+    // Load a single event.
+    loadEvent(poiId) {
+        // Use the generic event query filter.
+        // Date range isn't optional so specify any time in the past
+        const poiFilter : EventFilter = {
+            dateFrom : new Date(0),
+            dateTo : new Date(),
+            poiIds : [poiId]
+        };
+
+        // We expect an array in response with one element.
+        // Return just the first element (if there is one).
+        return this.http
+            .post<Poi[]>(this.baseUrl + "api/events/query", {
+                filter: poiFilter,
+                page: { skip: 0, take: 1 }
+            })
+            .pipe(
+                map(pois => pois.length > 0 ? pois[0] : null)
+            );
+    }
+
+    loadDataTraces(poiId) {
+        return this.http
+            .post<PoiData>(this.baseUrl + "api/events/traces", {
+                poiId : poiId,
+                channels : []
+            });
+    }
 
     private groupedEventFilter$ = new BehaviorSubject<GroupedEventFilter>(
         GroupedEventFilter_ForRecentDays(90)

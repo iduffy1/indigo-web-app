@@ -1,6 +1,6 @@
 <div class="row">
     <div class="d-flex justify-content-between">
-        <h1>Events List</h1>
+        <h3>Events List</h3>
         <div class="btn-group float-right mt-2">
             <button class="btn btn-primary" [routerLink]="" (click)="openSearchFilter()">
                 <i class="fa fa-search"></i>Filter</button>
@@ -10,9 +10,12 @@
 
 <p *ngIf="!pois"><em>Loading...</em></p>
 
-<div [hidden]="!pois">
-    <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortActive="timestamp"
-        matSortDirection="desc" matSortDisableClear class='table table-striped'>
+<div [hidden]="!sortedPois">
+    <table matSort
+        (matSortChange)="sortData($event)"
+        matSortStart="desc"
+        matSortDisableClear
+        class='table table-striped'>
         <tr>
             <th mat-sort-header="poiId">EventID</th>
             <!-- <th mat-sort-header="deviceName">Indigo</th> -->
@@ -22,7 +25,10 @@
             <th mat-sort-header="speed">Speed</th>
             <th mat-sort-header="poiCode">Channel</th>
             <th mat-sort-header="poiValue">Value</th>
-            <th>View</th>
+            <th>Chart</th>
+            <th>Map</th>
+            <th>Download</th>
+            <th>Group</th>
         </tr>
         <tbody>
             <tr *ngFor="let poi of sortedPois" [ngStyle]="getRowStyle(poi)">
@@ -34,9 +40,10 @@
                 <td>{{ poi.speed }}</td>
                 <td>{{ poi.poiCode }}</td>
                 <td>{{ poi.poiValue | number:"1.0-0" }}</td>
-                <td><a href="">View</a></td>
-                <td><a href="">Download</a></td>
-                <td><a [routerLink]="['/group', poi.poiId]">View</a></td>
+                <td><div (click)="onViewClicked(poi.poiId)"><i class="fa fa-line-chart"></i></div></td>
+                <td><div [routerLink]="['/map', poi.poiId]"><i class="fa fa-map-marker"></i></div></td>
+                <td><div><i class="fa fa-download"></i></div></td>
+                <td><div [routerLink]="['/group', poi.poiId]"><i class="fa fa-cubes"></i></div></td>
             </tr>
         </tbody>
     </table>

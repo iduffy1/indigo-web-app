@@ -1,6 +1,6 @@
 <div class="row">
     <div class="d-flex justify-content-between">
-        <h1>Grouped Events</h1>
+        <h3>Grouped Events</h3>
         <div class="btn-group float-right mt-2">
             <button class="btn btn-primary" [routerLink]="" (click)="openSearchFilter()">
                 <i class="fa fa-search"></i>Filter</button>
@@ -11,7 +11,7 @@
 <p *ngIf="!sortedGroupedEvents"><em>Loading...</em></p>
 
 <div [hidden]="!sortedGroupedEvents">
-    <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortActive="valueAtLastDate" matSortDirection="desc" matSortDisableClear
+    <table matSort (matSortChange)="sortData($event)" matSortStart="desc" matSortDisableClear
         class='table table-striped'>
         <tr>
             <th mat-sort-header="latestPoiDate">Date</th>

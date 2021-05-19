@@ -18,6 +18,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { GroupedEventFilterComponent } from "../grouped-event-filter/grouped-event-filter.component";
 import { Subscription } from "rxjs";
 import { GroupedEventsSorting } from "../utils/grouped-events-sorting";
+import { delay } from "rxjs/operators";
 
 @Component({
     selector: "app-grouped-events",
@@ -63,13 +64,21 @@ export class GroupedEventsListComponent
         // Load the data and apply initial sort.
         // Can only access MatSort after ViewInit so fetch the data here to guarantee matSort is available when data returns
 
-        this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe(
+        this.subscription = this.indigoDataService.groupedEventFilterResults$
+            .pipe(
+                delay(0)
+            ).subscribe(
             {
                 next: (result) => {
                     if (result?.data) {
                         this.groupedEvents = result.data;
                         this.currentFilter = result.filter;
-                        this.sortData(this.currentSort);
+                        if (!this.sortedGroupedEvents) {
+                            this.matSort.sort({ id: this.currentSort.active, start: 'desc', disableClear: true});
+                        }
+                        else {
+                            this.sortData(this.currentSort);
+                        }
                     }
                 },
             }

@@ -30,6 +30,10 @@ import { GroupedEventPoiListComponent } from "./grouped-event-poi-list/grouped-e
 import { GroupedEventChartComponent } from "./grouped-event-chart/grouped-event-chart.component";
 import { ChartsModule } from "ng2-charts";
 import { GroupedEventDetailsComponent } from './grouped-event-details/grouped-event-details.component';
+import { SingleEventPageComponent } from "./single-event-page/single-event-page.component";
+import { SingleEventDetailsComponent } from "./single-event-details/single-event-details.component";
+import { SingleEventChartComponent } from "./single-event-chart/single-event-chart.component";
+import { SingleEventDialogComponent } from "./single-event-dialog/single-event-dialog.component";
 
 @NgModule({
     declarations: [
@@ -47,6 +51,10 @@ import { GroupedEventDetailsComponent } from './grouped-event-details/grouped-ev
         GroupedEventChartComponent,
         GroupedEventPageComponent,
         GroupedEventDetailsComponent,
+        SingleEventPageComponent,
+        SingleEventChartComponent,
+        SingleEventDetailsComponent,
+        SingleEventDialogComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: "ng-cli-universal" }),
@@ -63,6 +71,7 @@ import { GroupedEventDetailsComponent } from './grouped-event-details/grouped-ev
             { path: "map", component: MapPageComponent },
             { path: "dash", component: DashBoardComponent },
             { path: "group/:id", component: GroupedEventPageComponent },
+            { path: "event/:id", component: SingleEventPageComponent }
         ]),
         BrowserAnimationsModule,
         FontAwesomeModule,

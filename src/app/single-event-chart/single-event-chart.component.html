@@ -1,0 +1,17 @@
+<div *ngIf="!poiData">Loading ...</div>
+<div class="row h-100" [hidden]="!poiData">
+    <div class="col">
+        <div class="chart-wrapper h-100">
+            <canvas baseChart
+                [datasets]="chartData"
+                [labels]="chartLabels"
+                [options]="chartOptions"
+                [plugins]="chartPlugins"
+                [legend]="chartLegend"
+                [chartType]="chartType">
+            </canvas>
+        </div>
+    </div>
+</div>
+
+

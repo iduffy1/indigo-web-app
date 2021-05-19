@@ -1,0 +1,26 @@
+<div class="detail-panel-container">
+    <div class="row detail-panel">
+        <p *ngIf="!poiData"><em>Loading...</em></p>
+        <div class="col" *ngIf="poiData">
+            <div class="detail-heading">EventID</div>
+            <div class="detail-value">{{ poiData.poi.poiId }} </div>
+            <div class="detail-heading">Date</div>
+            <div class="detail-value">{{ poiData.poi.timestamp | date: 'yyyy-MM-dd HH:mm:ss' }} </div>
+            <div class="detail-heading">Device</div>
+            <div class="detail-value">{{ poiData.poi.deviceName }} </div>
+            <div class="detail-heading">GPS</div>
+            <div class="detail-value">{{ poiData.poi.location[0] | number:'0.0-6' }},
+                {{poiData.poi.location[1] | number:'0.0-6' }} </div>
+            <div class="detail-heading">Track Location</div>
+            <div class="detail-value">{{ poiData.poi.trackLocation }}</div>
+            <div class="detail-heading">Speed</div>
+            <div class="detail-value">{{ poiData.poi.speed }} </div>
+            <div class="detail-heading">Direction</div>
+            <div class="detail-value">{{ poiData.poi.mileageDir }}</div>
+            <div class="detail-heading">Channel</div>
+            <div class="detail-value">{{ poiData.poi.poiCodeDesc }}</div>
+            <div class="detail-heading">Value</div>
+            <div class="detail-value">{{ poiData.poi.poiValue }}</div>
+        </div>
+    </div>
+</div>
