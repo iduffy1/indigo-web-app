@@ -28,7 +28,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@nguniversal/module-map-ngfactory-loader": "8.2.6",
     "@popperjs/core": "^2.9.2",
     "@types/ol": "^6.4.2",
     "@types/proj4": "^2.5.0",
