@@ -3,7 +3,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { RouterModule } from "@angular/router";
+import { AppRoutingModule } from './app-routing.module';
 
 import { MAT_DATE_LOCALE } from "@angular/material/core";
 
@@ -17,10 +17,7 @@ import { NavMenuComponent } from "./nav-menu/nav-menu.component";
 import { HomeComponent } from "./home/home.component";
 import { MapPageComponent } from "./ol-map/map-page/map-page.component";
 import { OlMapComponent } from "./ol-map/ol-map.component";
-
 import { ApiAuthorizationModule } from "src/api-authorization/api-authorization.module";
-
-import { AuthorizeGuard } from "src/api-authorization/authorize.guard";
 import { AuthorizeInterceptor } from "src/api-authorization/authorize.interceptor";
 import { AngularMaterialModule } from "./angular-material.module";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -56,7 +53,6 @@ import { SingleEventDialogComponent } from "./single-event-dialog/single-event-d
         SingleEventDetailsComponent,
         SingleEventDialogComponent
     ],
-
     imports: [
         BrowserModule,
         HttpClientModule,
@@ -65,15 +61,7 @@ import { SingleEventDialogComponent } from "./single-event-dialog/single-event-d
         ApiAuthorizationModule,
         AngularMaterialModule,
         MatDialogModule,
-        RouterModule.forRoot([
-            { path: "", component: HomeComponent, pathMatch: "full" },
-            { path: "events", component: EventsListComponent },
-            { path: "groups", component: GroupedEventsListComponent },
-            { path: "map", component: MapPageComponent },
-            { path: "dash", component: DashBoardComponent },
-            { path: "group/:id", component: GroupedEventPageComponent },
-            { path: "event/:id", component: SingleEventPageComponent }
-        ]),
+        AppRoutingModule,
         BrowserAnimationsModule,
         ChartsModule
     ],

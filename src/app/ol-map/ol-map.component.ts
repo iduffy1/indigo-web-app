@@ -15,7 +15,8 @@ import { Coordinate } from "ol/coordinate";
 import { Extent } from "ol/extent";
 import GeoJSON from "ol/format/GeoJSON";
 import Point from "ol/geom/Point";
-import { Vector as VectorLayer, Tile as TileLayer } from "ol/layer";
+import { Vector, Tile as TileLayer } from "ol/layer";
+import VectorLayer from "ol/layer/Vector";
 import { fromLonLat, get as GetProjection } from "ol/proj";
 import Projection from "ol/proj/Projection";
 import OSM from "ol/source/OSM";
@@ -40,8 +41,8 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
     Map: Map;
     @Output() mapReady = new EventEmitter<Map>();
 
-    eventsLayer: VectorLayer;
-    groupedEventsLayer: VectorLayer;
+    eventsLayer: Vector;
+    groupedEventsLayer: Vector;
 
     showLocation = true;
     public pois: Poi[];
@@ -88,9 +89,10 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
                 new TileLayer({
                     source: new OSM({
                         url:
-                            "http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+                            "http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                     }),
                 }),
+                this.createTestLayer(),
                 this.createTrackLayer(),
                 this.createRouteLayer(),
                 this.createMilepostLayer(),
@@ -105,11 +107,11 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
             controls: DefaultControls().extend([new ScaleLine({})]),
         });
         this.onMapReady(null);
+        console.log(this.Map);
     }
 
     onMapReady(e) {
         console.log("OnMap Ready");
-        console.log(e);
 
         this.subscriptions.push(
             this.indigoDataService.eventFilterResults$.subscribe({
@@ -128,9 +130,38 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         );
     }
 
+    createTestLayer() {
+        console.log(fromLonLat([-3.3839533759999654,   55.990810186000033]));
+        const landsend = new Feature({
+            geometry: new Point(
+                fromLonLat([-3.3839533759999654,   55.990810186000033])
+            )});
+
+        const testLayer = new VectorLayer({
+            source: new VectorSource({
+                features : [landsend]
+            }),
+            style:  new Style({
+                image: new Circle({
+                    fill: new Fill({
+                        color: "rgba(55, 200, 250, 0.5)",
+                    }),
+                    stroke: new Stroke({
+                        width: 1,
+                        color: "rgba(55, 200, 150, 0.8)",
+                    }),
+                    radius: 16,
+                })
+            })
+        });
+
+        return testLayer;
+    }
+
+
     createTrackLayer() {
         const styleCache = [];
-        const trackLayer = new VectorLayer({
+        const trackLayer = new Vector({
             //projection: 'EPSG:900913',
             source: new VectorSource({
                 url: "/map/NetworkLinks.shp.json",
@@ -160,7 +191,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createRouteLayer() {
         const styleCache = [];
-        const routeLayer = new VectorLayer({
+        const routeLayer = new Vector({
             source: new VectorSource({
                 //          projection: 'EPSG:900913',
                 url: "/map/NetworkReferenceLines.shp.json",
@@ -190,13 +221,14 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createMilepostLayer() {
         const styleCache = [];
-        const pointLayer = new VectorLayer({
+        const pointLayer = new Vector({
             source: new VectorSource({
                 //projection: 'EPSG:900913',
-                url: "/map/NetworkWaymarks.shp.json",
+                //url: "/map/NetworkWaymarks.shp.json",
+                url: "/map/Test.json",
                 format: new GeoJSON(),
             }),
-            maxResolution: 20,
+            //maxResolution: 20,
             style: (feature, resolution) => {
                 var text = this.showLocation ? feature.get("Mileage") : "";
 
@@ -238,7 +270,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createEventsLayer() {
         const styleCache = [];
-        const eventsLayer = new VectorLayer({
+        const eventsLayer = new Vector({
             source: new VectorSource({}),
             style: (feature, resolution) => {
                 var text = feature.get("eventid");
@@ -267,7 +299,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createGroupedEventsLayer() {
         const styleCache = [];
-        const groupedEventsLayer = new VectorLayer({
+        const groupedEventsLayer = new Vector({
             source: new VectorSource({}),
             style: (feature, resolution) => {
                 var id = feature.getId();
@@ -319,7 +351,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createImportLayer() {
         const styleCache = [];
-        const importLayer = new VectorLayer({
+        const importLayer = new Vector({
             source: new VectorSource({}),
             style: (feature, resolution) => {
                 var text = feature.getId();
@@ -367,7 +399,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createHighlightLayer() {
         const styleCache = [];
-        const highlightLayer = new VectorLayer({
+        const highlightLayer = new Vector({
             source: new VectorSource(),
             style: (feature, resolution) => {
                 var text = resolution < 5000 ? feature.get("name") : "";
@@ -414,7 +446,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createRqLayer() {
         const styleCache = [];
-        const rqLayer = new VectorLayer({
+        const rqLayer = new Vector({
             source: new VectorSource(),
             style: (feature, resolution) => {
                 var name = feature.get("name");
@@ -437,7 +469,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     creategEventsLayer() {
         const styleCache = [];
-        const gEventsLayer = new VectorLayer({
+        const gEventsLayer = new Vector({
             source: new VectorSource(),
             style: (feature, resolution) => {
                 var name = feature.get("name");
@@ -460,7 +492,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createGpsMatchLayer() {
         const styleCache = [];
-        const gpsMatchLayer = new VectorLayer({
+        const gpsMatchLayer = new Vector({
             source: new VectorSource({}),
             style: (feature, resolution) => {
                 var id = feature.getId();
@@ -523,4 +555,6 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
             this.groupedEventsLayer.getSource().addFeature(f);
         }
     }
+
+
 }
