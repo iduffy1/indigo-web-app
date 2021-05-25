@@ -98,7 +98,9 @@ export class EventsListComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    getRowStyle(ge: Poi) {}
+    getRowStyle(ge: Poi)  {
+        return {};
+    }
 
     onViewClicked(poiId) {
         const dialogRef = this.dialog.open(SingleEventDialogComponent, {

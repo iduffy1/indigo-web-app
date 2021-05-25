@@ -12,11 +12,9 @@ import {
 import { View, Map, Feature } from "ol";
 import { ScaleLine, defaults as DefaultControls } from "ol/control";
 import { Coordinate } from "ol/coordinate";
-import { Extent } from "ol/extent";
 import GeoJSON from "ol/format/GeoJSON";
 import Point from "ol/geom/Point";
-import { Vector, Tile as TileLayer } from "ol/layer";
-import VectorLayer from "ol/layer/Vector";
+import { Vector, Tile } from "ol/layer";
 import { fromLonLat, get as GetProjection } from "ol/proj";
 import Projection from "ol/proj/Projection";
 import OSM from "ol/source/OSM";
@@ -37,7 +35,6 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
     @Input() zoom: number;
     view: View;
     projection: Projection;
-    extent: Extent = [-20026376.39, -20048966.1, 20026376.39, 20048966.1];
     Map: Map;
     @Output() mapReady = new EventEmitter<Map>();
 
@@ -70,11 +67,8 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
     }
 
     private initMap(): void {
-        //proj4.defs("EPSG:3857","+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs");
-        //register(proj4)
-
         this.projection = GetProjection("EPSG:3857");
-        this.projection.setExtent(this.extent);
+
         this.view = new View({
             center: fromLonLat(this.center),
             zoom: this.zoom,
@@ -86,13 +80,12 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
         this.Map = new Map({
             layers: [
-                new TileLayer({
+                new Tile({
                     source: new OSM({
                         url:
-                            "http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+                            "http://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
                     }),
                 }),
-                this.createTestLayer(),
                 this.createTrackLayer(),
                 this.createRouteLayer(),
                 this.createMilepostLayer(),
@@ -107,7 +100,6 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
             controls: DefaultControls().extend([new ScaleLine({})]),
         });
         this.onMapReady(null);
-        console.log(this.Map);
     }
 
     onMapReady(e) {
@@ -132,14 +124,14 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     createTestLayer() {
         console.log(fromLonLat([-3.3839533759999654,   55.990810186000033]));
-        const landsend = new Feature({
+        const forthBridge = new Feature({
             geometry: new Point(
                 fromLonLat([-3.3839533759999654,   55.990810186000033])
             )});
 
-        const testLayer = new VectorLayer({
+        const testLayer = new Vector({
             source: new VectorSource({
-                features : [landsend]
+                features : [forthBridge]
             }),
             style:  new Style({
                 image: new Circle({
@@ -193,7 +185,6 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         const styleCache = [];
         const routeLayer = new Vector({
             source: new VectorSource({
-                //          projection: 'EPSG:900913',
                 url: "/map/NetworkReferenceLines.shp.json",
                 format: new GeoJSON(),
             }),
@@ -223,12 +214,10 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         const styleCache = [];
         const pointLayer = new Vector({
             source: new VectorSource({
-                //projection: 'EPSG:900913',
-                //url: "/map/NetworkWaymarks.shp.json",
-                url: "/map/Test.json",
+                url: "/map/NetworkWaymarks.shp.json",
                 format: new GeoJSON(),
             }),
-            //maxResolution: 20,
+            maxResolution: 20,
             style: (feature, resolution) => {
                 var text = this.showLocation ? feature.get("Mileage") : "";
 
@@ -555,6 +544,4 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
             this.groupedEventsLayer.getSource().addFeature(f);
         }
     }
-
-
 }
