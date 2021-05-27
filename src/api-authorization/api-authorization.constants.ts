@@ -1,4 +1,4 @@
-export const ApplicationName = 'AspAngular';
+export const ApplicationName = 'Indigo-WebApp';
 
 export const ReturnUrlType = 'returnUrl';
 

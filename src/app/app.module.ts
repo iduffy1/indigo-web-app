@@ -31,6 +31,7 @@ import { SingleEventPageComponent } from './single-event-page/single-event-page.
 import { SingleEventDetailsComponent } from './single-event-details/single-event-details.component';
 import { SingleEventChartComponent } from './single-event-chart/single-event-chart.component';
 import { SingleEventDialogComponent } from './single-event-dialog/single-event-dialog.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
     declarations: [
@@ -52,6 +53,7 @@ import { SingleEventDialogComponent } from './single-event-dialog/single-event-d
         SingleEventChartComponent,
         SingleEventDetailsComponent,
         SingleEventDialogComponent,
+        HomePageComponent
     ],
     imports: [
         BrowserModule,
@@ -66,11 +68,7 @@ import { SingleEventDialogComponent } from './single-event-dialog/single-event-d
         ChartsModule,
     ],
     providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: AuthorizeInterceptor,
-            multi: true,
-        },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
     ],

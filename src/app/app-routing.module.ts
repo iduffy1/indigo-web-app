@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { DashBoardComponent } from './dashboard/dashboard.component';
 import { EventsListComponent } from './events-list/events-list.component';
 import { GroupedEventPageComponent } from './grouped-event-page/grouped-event-page.component';
 import { GroupedEventsListComponent } from './grouped-events-list/grouped-events-list.component';
+import { HomePageComponent } from './home-page/home-page.component';
 import { MapPageComponent } from './map-page/map-page.component';
 import { SingleEventPageComponent } from './single-event-page/single-event-page.component';
 
 const routes: Routes = [
-    { path: '', component: EventsListComponent, pathMatch: 'full' },
-    { path: 'events', component: EventsListComponent },
-    { path: 'groups', component: GroupedEventsListComponent },
-    { path: 'map', component: MapPageComponent },
-    { path: 'dash', component: DashBoardComponent },
-    { path: 'group/:id', component: GroupedEventPageComponent },
-    { path: 'event/:id', component: SingleEventPageComponent },
+    { path: '', component: HomePageComponent, pathMatch: 'full' },
+    { path: 'events', component: EventsListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'groups', component: GroupedEventsListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'map', component: MapPageComponent, canActivate: [AuthorizeGuard] },
+    { path: 'dash', component: DashBoardComponent, canActivate: [AuthorizeGuard] },
+    { path: 'group/:id', component: GroupedEventPageComponent, canActivate: [AuthorizeGuard] },
+    { path: 'event/:id', component: SingleEventPageComponent, canActivate: [AuthorizeGuard] },
 ];
 
 @NgModule({
