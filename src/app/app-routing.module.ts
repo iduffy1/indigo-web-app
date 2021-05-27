@@ -10,7 +10,8 @@ import { MapPageComponent } from './map-page/map-page.component';
 import { SingleEventPageComponent } from './single-event-page/single-event-page.component';
 
 const routes: Routes = [
-    { path: '', component: HomePageComponent, pathMatch: 'full' },
+    { path: '', redirectTo: '/groups', pathMatch: 'full' },
+    { path: 'home', component: HomePageComponent, pathMatch: 'full' },
     { path: 'events', component: EventsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'groups', component: GroupedEventsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'map', component: MapPageComponent, canActivate: [AuthorizeGuard] },

@@ -1,6 +1,10 @@
 <h3>Welcome to the Indigo Data Portal</h3>
 
 <div>
-    Please login to access data.
+    Stuf about Indigo.
+
+    <div *ngIf="!(isAuthenticated | async)">
+        Please login to access the data.
+    </div>
 
 </div>
