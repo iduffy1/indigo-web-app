@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
 import { BehaviorSubject, Observable, of } from "rxjs";
 import { catchError, map, shareReplay, switchMap } from "rxjs/operators";
+import { DtoUser } from "src/admin/models";
 import { GroupedEvent, GroupedEventDetails, Poi } from "src/models/dto";
 import {
     EventFilter,
@@ -133,6 +134,12 @@ export class IndigoDataService {
         return this.http.post<GroupedEventDetails>(
             this.baseUrl + "api/groups/get",
             { filter: filter }
+        );
+    }
+
+    loadUsers() : Observable<DtoUser[]>  {
+        return this.http.get<DtoUser[]>(
+            this.baseUrl + "api/admin/users"
         );
     }
 }

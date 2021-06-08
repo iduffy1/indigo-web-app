@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { UserListComponent } from 'src/admin/user-list/user-list.component';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { DashBoardComponent } from './dashboard/dashboard.component';
 import { EventsListComponent } from './events-list/events-list.component';
@@ -18,6 +19,7 @@ const routes: Routes = [
     { path: 'dash', component: DashBoardComponent, canActivate: [AuthorizeGuard] },
     { path: 'group/:id', component: GroupedEventPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'event/:id', component: SingleEventPageComponent, canActivate: [AuthorizeGuard] },
+    { path: 'users', component: UserListComponent, canActivate: [AuthorizeGuard] }
 ];
 
 @NgModule({
