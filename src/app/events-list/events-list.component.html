@@ -31,7 +31,7 @@
             <th>Group</th>
         </tr>
         <tbody>
-            <tr *ngFor="let poi of sortedPois" [ngStyle]="getRowStyle(poi)">
+            <tr *ngFor="let poi of sortedPois | slice:0:200" [ngStyle]="getRowStyle(poi)">
                 <td>{{ poi.poiId }}</td>
                 <!-- <td>{{ poi.deviceName }}</td> -->
                 <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>

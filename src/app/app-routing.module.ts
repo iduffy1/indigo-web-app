@@ -9,17 +9,19 @@ import { GroupedEventsListComponent } from './grouped-events-list/grouped-events
 import { HomePageComponent } from './home-page/home-page.component';
 import { MapPageComponent } from './map-page/map-page.component';
 import { SingleEventPageComponent } from './single-event-page/single-event-page.component';
+import { OldUserListComponent } from '../admin/user-list/old-user-list.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/groups', pathMatch: 'full' },
     { path: 'home', component: HomePageComponent, pathMatch: 'full' },
     { path: 'events', component: EventsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'groups', component: GroupedEventsListComponent, canActivate: [AuthorizeGuard] },
-    { path: 'map', component: MapPageComponent, canActivate: [AuthorizeGuard] },
+    { path: 'map/:id', component: MapPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'dash', component: DashBoardComponent, canActivate: [AuthorizeGuard] },
     { path: 'group/:id', component: GroupedEventPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'event/:id', component: SingleEventPageComponent, canActivate: [AuthorizeGuard] },
-    { path: 'users', component: UserListComponent, canActivate: [AuthorizeGuard] }
+    { path: 'users', component: UserListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'oldusers', component: OldUserListComponent, canActivate: [AuthorizeGuard] }
 ];
 
 @NgModule({

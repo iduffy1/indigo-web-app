@@ -39,7 +39,7 @@ export class IndigoDataService {
             return this.http
                 .post<Poi[]>(this.baseUrl + "api/events/query", {
                     filter: filter,
-                    page: { skip: 0, take: 200 },
+                    page: { skip: 0, take: 20000 },// effectively disable paging for now
                 })
                 .pipe(
                     map(
@@ -105,7 +105,7 @@ export class IndigoDataService {
             return this.http
                 .post<GroupedEvent[]>(this.baseUrl + "api/groups/query", {
                     filter: filter,
-                    page: { skip: 0, take: 200 },
+                    page: { skip: 0, take: 20000 }, //effectively disable paging for now
                 })
                 .pipe(
                     map(
@@ -140,6 +140,12 @@ export class IndigoDataService {
     loadUsers() : Observable<DtoUser[]>  {
         return this.http.get<DtoUser[]>(
             this.baseUrl + "api/admin/users"
+        );
+    }
+
+    loadOldUsers() : Observable<DtoUser[]>  {
+        return this.http.get<DtoUser[]>(
+            this.baseUrl + "api/admin/old_users"
         );
     }
 }

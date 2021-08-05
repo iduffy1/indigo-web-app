@@ -33,6 +33,7 @@ import { SingleEventChartComponent } from './single-event-chart/single-event-cha
 import { SingleEventDialogComponent } from './single-event-dialog/single-event-dialog.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { UserListComponent } from 'src/admin/user-list/user-list.component';
+import { OldUserListComponent } from 'src/admin/user-list/old-user-list.component';
 
 @NgModule({
     declarations: [
@@ -55,7 +56,8 @@ import { UserListComponent } from 'src/admin/user-list/user-list.component';
         SingleEventDetailsComponent,
         SingleEventDialogComponent,
         HomePageComponent,
-        UserListComponent
+        UserListComponent,
+        OldUserListComponent
     ],
     imports: [
         BrowserModule,

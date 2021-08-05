@@ -7,11 +7,13 @@ import {
     EventEmitter,
     ChangeDetectorRef,
     OnDestroy,
+    ViewContainerRef,
 } from "@angular/core";
 
 import { View, Map, Feature } from "ol";
 import { ScaleLine, defaults as DefaultControls } from "ol/control";
 import { Coordinate } from "ol/coordinate";
+import { getCenter } from "ol/extent";
 import GeoJSON from "ol/format/GeoJSON";
 import Point from "ol/geom/Point";
 import { Vector, Tile } from "ol/layer";
@@ -19,7 +21,7 @@ import { fromLonLat, get as GetProjection } from "ol/proj";
 import Projection from "ol/proj/Projection";
 import OSM from "ol/source/OSM";
 import VectorSource from "ol/source/Vector";
-import { Fill, Stroke, Circle, Style, Text } from "ol/style";
+import { Fill, Stroke, Circle, Style, Text, RegularShape } from "ol/style";
 import { Subscription } from "rxjs";
 
 import { GroupedEvent, Poi } from "src/models/dto";
@@ -33,6 +35,7 @@ import { IndigoDataService } from "../indigo-data.service";
 export class OlMapComponent implements AfterViewInit, OnDestroy {
     @Input() center: Coordinate;
     @Input() zoom: number;
+    @Input() poiId : number;
     view: View;
     projection: Projection;
     Map: Map;
@@ -40,6 +43,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
     eventsLayer: Vector;
     groupedEventsLayer: Vector;
+    highlightLayer: Vector;
 
     showLocation = true;
     public pois: Poi[];
@@ -77,6 +81,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
 
         this.eventsLayer = this.createEventsLayer();
         this.groupedEventsLayer = this.createGroupedEventsLayer();
+        this.highlightLayer = this.createHighlightLayer();
 
         this.Map = new Map({
             layers: [
@@ -90,7 +95,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
                 this.createRouteLayer(),
                 this.createMilepostLayer(),
                 this.eventsLayer,
-                this.createHighlightLayer(),
+                this.highlightLayer,
                 this.groupedEventsLayer,
                 this.createImportLayer(),
                 this.createGpsMatchLayer(),
@@ -108,7 +113,10 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         this.subscriptions.push(
             this.indigoDataService.eventFilterResults$.subscribe({
                 next: (result) => {
-                    if (result?.data) this.setEventsLayer(result.data);
+                    if (result?.data) {
+                        this.setEventsLayer(result.data);
+                        if (this.poiId) this.zoomToEvent(this.poiId);
+                    }
                 },
             })
         );
@@ -257,27 +265,69 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         return pointLayer;
     }
 
+    getColorOfPoi(poi : Poi) : string {
+        switch (poi.poiCode) {
+            case "V.BP":
+            case "V.RQ":
+                return "rgba(200, 55, 55, 0.8)";
+            case "L.BP":
+            case "L.RQ":
+                return "rgba(55, 55, 200, 0.8)";
+            default:
+                // Bright Green to highlight undhandled Poi Code
+                return "rgba(0, 255, 0, 1)";
+        }
+    }
+
+    getStyleOfPoi(poi : Poi) : Style {
+        var color = this.getColorOfPoi(poi);
+        switch (poi.poiCode) {
+            case "V.BP":
+            case "L.BP":
+                return new Style({
+                    image: new Circle({
+                        fill: new Fill({
+                            color: color,
+                        }),
+                        stroke: new Stroke({
+                            width: 1,
+                            color: color,
+                        }),
+                        radius: 6,
+                    }),
+                    zIndex: 999,
+                });
+            case "V.RQ":
+            case "L.RQ":
+                return new Style({
+                    image: new RegularShape({
+                        fill: new Fill({
+                            color: color,
+                        }),
+                        stroke: new Stroke({
+                            width: 1,
+                            color: color,
+                        }),
+                        points: 3,
+                        radius: 8,
+                        //angle: Math.PI / 4
+                    }),
+                    zIndex: 999,
+                });
+
+        }
+    }
+
     createEventsLayer() {
         const styleCache = [];
         const eventsLayer = new Vector({
             source: new VectorSource({}),
             style: (feature, resolution) => {
-                var text = feature.get("eventid");
+                var poi : Poi = feature.get("poi");
+                var text = poi.poiId;
                 if (!styleCache[text]) {
                     styleCache[text] = [
-                        new Style({
-                            image: new Circle({
-                                fill: new Fill({
-                                    color: "rgba(200, 55, 150, 0.8)",
-                                }),
-                                stroke: new Stroke({
-                                    width: 1,
-                                    color: "rgba(200, 55, 150, 0.8)",
-                                }),
-                                radius: 6,
-                            }),
-                            zIndex: 999,
-                        }),
+                        this.getStyleOfPoi(poi)
                     ];
                 }
                 return styleCache[text];
@@ -522,6 +572,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
                     fromLonLat([poi.location[1], poi.location[0]])
                 ),
                 eventid: poi.poiId,
+                poi: poi
             });
             f.setId(poi.poiId);
             this.eventsLayer.getSource().addFeature(f);
@@ -543,5 +594,27 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
             f.setId(ge.poiId);
             this.groupedEventsLayer.getSource().addFeature(f);
         }
+    }
+
+    zoomToFeature(feature : Feature) {
+        if (feature) {
+            let center = getCenter(feature.getGeometry().getExtent());
+            this.Map.getView().setCenter(center);
+            this.Map.getView().setZoom(12);
+        }
+    }
+
+    zoomToEvent(poiID : number) {
+        if (!poiID) return;
+        var feature = this.eventsLayer.getSource().getFeatureById(poiID);
+        if (feature) {
+            this.zoomToFeature(feature);
+            this.highlightFeature(feature);
+        }
+    }
+
+    highlightFeature(feature) {
+        this.highlightLayer.getSource().clear();
+        this.highlightLayer.getSource().addFeature(feature);
     }
 }
