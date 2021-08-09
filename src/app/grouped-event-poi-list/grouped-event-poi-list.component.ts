@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { Sort } from "@angular/material/sort";
 import { GroupedEventDetails, Poi } from "src/models/dto";
+import { SingleEventDialogComponent } from "../single-event-dialog/single-event-dialog.component";
 import { PoiSorting } from "../utils/poi-sorting";
 
 @Component({
@@ -14,7 +16,9 @@ export class GroupedEventPoiListComponent implements OnChanges {
     currentSort: Sort;
     sortData: ((sort: Sort) => void);
 
-    constructor() {
+    constructor(
+        public dialog: MatDialog
+    ) {
         this.sortData = PoiSorting.createSortDataFunc(
             () => this.groupedEventDetails.pois,
             (sortedPois, sort) => {
@@ -34,6 +38,12 @@ export class GroupedEventPoiListComponent implements OnChanges {
         }
     }
 
+    onViewClicked(poiId) {
+        const dialogRef = this.dialog.open(SingleEventDialogComponent, {
+            width: "800px",
+            data: poiId,
+        });
+    }
 
 
 

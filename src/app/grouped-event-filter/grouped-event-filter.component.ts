@@ -41,6 +41,7 @@ export class GroupedEventFilterComponent implements OnInit, OnDestroy {
             event: new FormGroup({
                 dateFrom: new FormControl(this.data.event.dateFrom),
                 dateTo: new FormControl(this.data.event.dateTo),
+                route: new FormControl(this.data.event.route),
                 track: new FormControl(this.data.event.track),
                 distFrom: new FormControl(this.data.event.distFrom, [
                     NumberValidator,
@@ -57,6 +58,9 @@ export class GroupedEventFilterComponent implements OnInit, OnDestroy {
             tlValueMin: new FormControl(this.data.tlValueMin, [
                 NumberValidator,
             ]),
+            tlMinEventCount: new FormControl(this.data.tlMinEventCount, [
+                NumberValidator,
+            ])
         });
 
         this.subscription = this.indigoDataService.groupedEventFilterResults$.subscribe(

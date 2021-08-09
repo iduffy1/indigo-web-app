@@ -19,6 +19,10 @@ export class EventFilterComponent implements OnInit, OnDestroy {
     distTo: string;
     mileageDir: string;
     eventType: string;
+    latMin: string;
+    latMax: string;
+    lonMin: string;
+    lonMax: string;
 
     errorMessages: string[] = [];
     isLoading = false;
@@ -35,11 +39,17 @@ export class EventFilterComponent implements OnInit, OnDestroy {
         this.form = new FormGroup({
             dateFrom: new FormControl(this.data.dateFrom),
             dateTo: new FormControl(this.data.dateTo),
+            route: new FormControl(this.data.route),
             track: new FormControl(this.data.track),
             distFrom: new FormControl(this.data.distFrom),
             distTo: new FormControl(this.data.distTo),
             mileageDir: new FormControl(this.data.mileageDir ?? ""),
             eventType: new FormControl(this.data.eventType ?? ""),
+            latMin: new FormControl(this.data.latMin),
+            latMax: new FormControl(this.data.latMax),
+            lonMin: new FormControl(this.data.lonMin),
+            lonMax: new FormControl(this.data.lonMax),
+
         });
 
         this.subscription = this.indigoDataService.eventFilterResults$.subscribe(
@@ -66,11 +76,16 @@ export class EventFilterComponent implements OnInit, OnDestroy {
         const eventFilter: EventFilter = {
             dateFrom: this.form.get("dateFrom").value,
             dateTo: this.form.get("dateTo").value,
+            route: this.form.get("route").value,
             track: this.form.get("track").value,
             distFrom: this.form.get("distFrom").value,
             distTo: this.form.get("distTo").value,
             mileageDir: this.form.get("mileageDir").value,
             eventType: this.form.get("eventType").value,
+            latMin: this.form.get("latMin").value,
+            latMax: this.form.get("latMax").value,
+            lonMin: this.form.get("lonMin").value,
+            lonMax: this.form.get("lonMax").value,
         };
 
         console.log(eventFilter);

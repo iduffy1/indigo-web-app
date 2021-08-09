@@ -3,6 +3,7 @@ import { Poi } from "./dto";
 export interface EventFilter {
     dateFrom: Date;
     dateTo: Date;
+    route?: string;
     track?: string;
     distFrom?: string;
     distTo?: string;
@@ -10,6 +11,10 @@ export interface EventFilter {
     eventType?: string;
     poiIds? : number[];
     recordIds? : number[];
+    latMin?: string;
+    latMax?: string;
+    lonMin?: string;
+    lonMax?: string;
 }
 
 export interface EventFilterResults {

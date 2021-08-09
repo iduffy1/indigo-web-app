@@ -8,7 +8,7 @@
             <th mat-sort-header="timestamp">Date</th>
             <th mat-sort-header="speed">Speed</th>
             <th mat-sort-header="poiValue">Peak Value</th>
-            <th>View</th>
+            <th>Trace</th>
             <th>Download</th>
         </tr>
         <tbody>
@@ -18,7 +18,8 @@
                 <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>
                 <td>{{ poi.speed }}</td>
                 <td>{{ poi.poiValue | number:"1.0-0" }}</td>
-                <td><a href="">View</a></td>
+                <td><div *ngIf="(poi.poiCode != 'V.LQ') && (poi.poiCode != 'L.RQ')"
+                    (click)="onViewClicked(poi.poiId)"><i class="fa fa-line-chart"></i></div></td>
                 <td><a href="">Download</a></td>
             </tr>
         </tbody>

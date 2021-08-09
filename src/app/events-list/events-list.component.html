@@ -25,8 +25,7 @@
             <th mat-sort-header="speed">Speed</th>
             <th mat-sort-header="poiCode">Channel</th>
             <th mat-sort-header="poiValue">Value</th>
-            <th>Chart</th>
-            <th>Map</th>
+            <th>Trace</th>
             <th>Download</th>
             <th>Group</th>
         </tr>
@@ -35,13 +34,12 @@
                 <td>{{ poi.poiId }}</td>
                 <!-- <td>{{ poi.deviceName }}</td> -->
                 <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>
-                <td>{{ poi.trackLocation }} </td>
+                <td><span [routerLink]="['/map', poi.poiId]"><i class="fa fa-map-marker"></i></span>{{ poi.trackLocation }} </td>
                 <td>{{ poi.mileageDir }}</td>
                 <td>{{ poi.speed }}</td>
                 <td>{{ poi.poiCode }}</td>
                 <td>{{ poi.poiValue | number:"1.0-0" }}</td>
-                <td><div (click)="onViewClicked(poi.poiId)"><i class="fa fa-line-chart"></i></div></td>
-                <td><div [routerLink]="['/map', poi.poiId]"><i class="fa fa-map-marker"></i></div></td>
+                <td><div *ngIf="(poi.poiCode != 'V.LQ') && (poi.poiCode != 'L.RQ')" (click)="onViewClicked(poi.poiId)"><i class="fa fa-line-chart"></i></div></td>
                 <td><div><i class="fa fa-download"></i></div></td>
                 <td><div [routerLink]="['/group', poi.poiId]"><i class="fa fa-cubes"></i></div></td>
             </tr>

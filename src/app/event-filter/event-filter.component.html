@@ -20,6 +20,18 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-sm-2 d-flex align-items-center"><label for="route">Route</label></div>
+            <div class="col-sm-4">
+                <!-- <mat-form-field appearance="fill"> -->
+                <select formControlName="route">
+                    <option value="" selected>Any</option>
+                    <option value="nr.nw">North West</option>
+                    <option value="nr.wcs">West Coast South</option>
+                </select>
+                <!-- </mat-form-field> -->
+            </div>
+        </div>
+        <div class="row">
             <div class="col-sm-2 d-flex align-items-center"><label for="track">ELR / Track</label></div>
             <div class="col-sm-10"><input type="text" class="form-control" id="track" formControlName="track"></div>
         </div>
@@ -29,6 +41,22 @@
             </div>
             <div class="col-sm-2 d-flex align-items-center"><label for="distTo">Dist To</label></div>
             <div class="col-sm-2"><input type="text" class="form-control" id="distTo" formControlName="distTo"></div>
+        </div>
+
+
+        <div class="row" [hidden]="true">
+            <div class="col-sm-2 d-flex align-items-center"><label for="latMin">Lat min</label></div>
+            <div class="col-sm-2"><input type="text" class="form-control" id="latMin" formControlName="latMin">
+            </div>
+            <div class="col-sm-2 d-flex align-items-center"><label for="latMax">Lat max</label></div>
+            <div class="col-sm-2"><input type="text" class="form-control" id="latMax" formControlName="latMax"></div>
+        </div>
+        <div class="row" [hidden]="true">
+            <div class="col-sm-2 d-flex align-items-center"><label for="lonMin">Lon min</label></div>
+            <div class="col-sm-2"><input type="text" class="form-control" id="lonMin" formControlName="lonMin">
+            </div>
+            <div class="col-sm-2 d-flex align-items-center"><label for="lonMax">Lon max</label></div>
+            <div class="col-sm-2"><input type="text" class="form-control" id="lonMax" formControlName="lonMax"></div>
         </div>
         <div class="row">
             <div class="col-sm-2 d-flex align-items-center"><label for="milageDir">Mileage Direction</label></div>
@@ -45,13 +73,13 @@
         <div class="row">
             <div class="col-sm-2 d-flex align-items-center"><label for="eventType">Event Type</label></div>
             <div class="col-sm-4">
-                <!-- <mat-form-field appearance="fill"> -->
                 <select formControlName="eventType">
                     <option value="" selected>Any</option>
-                    <option value="L.BP">Lateral</option>
-                    <option value="V.BP">Vertical</option>
+                    <option value="L.BP">Lateral Bump</option>
+                    <option value="V.BP">Vertical Bump</option>
+                    <option value="L.RQ">Lateral RQ</option>
+                    <option value="V.RQ">Vertical RQ</option>
                 </select>
-                <!-- </mat-form-field> -->
             </div>
         </div>
 

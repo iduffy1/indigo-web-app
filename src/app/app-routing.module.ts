@@ -16,6 +16,7 @@ const routes: Routes = [
     { path: 'home', component: HomePageComponent, pathMatch: 'full' },
     { path: 'events', component: EventsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'groups', component: GroupedEventsListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'map', redirectTo: 'map/', pathMatch: 'full' },
     { path: 'map/:id', component: MapPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'dash', component: DashBoardComponent, canActivate: [AuthorizeGuard] },
     { path: 'group/:id', component: GroupedEventPageComponent, canActivate: [AuthorizeGuard] },

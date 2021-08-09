@@ -22,19 +22,20 @@
             <th mat-sort-header="gradient">Trend Gradient</th>
             <th mat-sort-header="valueAtLastDate">Trend Latest</th>
             <th mat-sort-header="daysSinceLastDate">Age (days)</th>
-            <th>View</th>
+            <th>Details</th>
         </tr>
         <tbody>
             <tr *ngFor="let ge of sortedGroupedEvents" [ngStyle]="getRowStyle(ge)">
                 <td>{{ ge.latestPoiDate }}</td>
-                <td>{{ ge.trackLocation }} </td>
+                <td><span [routerLink]="['/map', ge.poiId]"><i class="fa fa-map-marker"></i></span>
+                    {{ ge.trackLocation }}</td>
                 <td>{{ ge.mileageDir }}</td>
                 <td>{{ ge.numPois }}</td>
                 <td>{{ ge.poiCode }}</td>
                 <td>{{ ge.trendLine.gradient | number: '1.2-2'}}</td>
                 <td>{{ ge.trendLine.valueAtLastDate | number: '1.0-0' }}</td>
                 <td>{{ ge.trendLine.daysSinceLastDate }}</td>
-                <td><a [routerLink]="['/group', ge.poiId]">View</a></td>
+                <td><div [routerLink]="['/group', ge.poiId]"><i class="fa fa-list-ul"></i></div></td>
             </tr>
         </tbody>
     </table>

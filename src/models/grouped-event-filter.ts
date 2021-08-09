@@ -6,6 +6,7 @@ export interface GroupedEventFilter {
 
   tlGradientMin? : string;
   tlValueMin? : string;
+  tlMinEventCount? : string;
 }
 
 
