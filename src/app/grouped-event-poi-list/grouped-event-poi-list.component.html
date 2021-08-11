@@ -18,7 +18,7 @@
                 <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>
                 <td>{{ poi.speed }}</td>
                 <td>{{ poi.poiValue | number:"1.0-0" }}</td>
-                <td><div *ngIf="(poi.poiCode != 'V.LQ') && (poi.poiCode != 'L.RQ')"
+                <td><div *ngIf="(poi.poiCode != 'V.RQ') && (poi.poiCode != 'L.RQ')"
                     (click)="onViewClicked(poi.poiId)"><i class="fa fa-line-chart"></i></div></td>
                 <td><a href="">Download</a></td>
             </tr>
