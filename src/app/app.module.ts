@@ -34,6 +34,7 @@ import { SingleEventDialogComponent } from './single-event-dialog/single-event-d
 import { HomePageComponent } from './home-page/home-page.component';
 import { UserListComponent } from 'src/admin/user-list/user-list.component';
 import { OldUserListComponent } from 'src/admin/user-list/old-user-list.component';
+import { ToolsComponent } from './tools/tools.component';
 
 @NgModule({
     declarations: [
@@ -57,7 +58,8 @@ import { OldUserListComponent } from 'src/admin/user-list/old-user-list.componen
         SingleEventDialogComponent,
         HomePageComponent,
         UserListComponent,
-        OldUserListComponent
+        OldUserListComponent,
+        ToolsComponent
     ],
     imports: [
         BrowserModule,

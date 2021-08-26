@@ -18,7 +18,7 @@
         class='table table-striped'>
         <tr>
             <th mat-sort-header="poiId">EventID</th>
-            <!-- <th mat-sort-header="deviceName">Indigo</th> -->
+            <th mat-sort-header="deviceName">Indigo</th>
             <th mat-sort-header="timestamp">Date</th>
             <th mat-sort-header="trackLocation">Location</th>
             <th mat-sort-header="mileageDir">Direction</th>
@@ -32,7 +32,7 @@
         <tbody>
             <tr *ngFor="let poi of sortedPois | slice:0:200" [ngStyle]="getRowStyle(poi)">
                 <td>{{ poi.poiId }}</td>
-                <!-- <td>{{ poi.deviceName }}</td> -->
+                <td>{{ poi.deviceName }}</td>
                 <td>{{ poi.timestamp | date:"yyyy-MM-dd HH:mm"}}</td>
                 <td><span [routerLink]="['/map', poi.poiId]"><i class="fa fa-map-marker"></i></span>{{ poi.trackLocation }} </td>
                 <td>{{ poi.mileageDir }}</td>

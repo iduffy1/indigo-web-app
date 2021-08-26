@@ -148,4 +148,11 @@ export class IndigoDataService {
             this.baseUrl + "api/admin/old_users"
         );
     }
+
+    loadRecordRaw(recordId: number) {
+        const x = this.baseUrl + "api/events/record/raw/" + recordId.toString();
+        return this.http.get(
+            this.baseUrl + "api/events/record/raw/" + recordId.toString(),
+            {responseType: "text"});
+    }
 }

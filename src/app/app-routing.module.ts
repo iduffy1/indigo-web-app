@@ -10,6 +10,7 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { MapPageComponent } from './map-page/map-page.component';
 import { SingleEventPageComponent } from './single-event-page/single-event-page.component';
 import { OldUserListComponent } from '../admin/user-list/old-user-list.component';
+import { ToolsComponent } from './tools/tools.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/groups', pathMatch: 'full' },
@@ -22,7 +23,8 @@ const routes: Routes = [
     { path: 'group/:id', component: GroupedEventPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'event/:id', component: SingleEventPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'users', component: UserListComponent, canActivate: [AuthorizeGuard] },
-    { path: 'oldusers', component: OldUserListComponent, canActivate: [AuthorizeGuard] }
+    { path: 'oldusers', component: OldUserListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'tools', component: ToolsComponent, canActivate: [AuthorizeGuard] }
 ];
 
 @NgModule({

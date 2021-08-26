@@ -1,0 +1,6 @@
+<form #fetchRecord= "ngForm" (ngSubmit)="onClickSubmit(fetchRecord.value)" >
+Record ID
+<input type="text" name="recordId" [(ngModel)]="recordId"  ngmodel />
+<input type="submit"/>
+</form>
+<textarea [(ngModel)]="fileContents" width="400" height="400" ></textarea>
