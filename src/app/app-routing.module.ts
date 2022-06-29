@@ -4,6 +4,7 @@ import { UserListComponent } from 'src/admin/user-list/user-list.component';
 import { AuthorizeGuard } from 'src/api-authorization/authorize.guard';
 import { DashBoardComponent } from './dashboard/dashboard.component';
 import { EventsListComponent } from './events-list/events-list.component';
+import { RawRecordsListComponent } from './raw-records-list/raw-records-list.component';
 import { GroupedEventPageComponent } from './grouped-event-page/grouped-event-page.component';
 import { GroupedEventsListComponent } from './grouped-events-list/grouped-events-list.component';
 import { HomePageComponent } from './home-page/home-page.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
     { path: 'home', component: HomePageComponent, pathMatch: 'full' },
     { path: 'events', component: EventsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'groups', component: GroupedEventsListComponent, canActivate: [AuthorizeGuard] },
+    { path: 'rawrecords', component: RawRecordsListComponent, canActivate: [AuthorizeGuard] },
     { path: 'map', redirectTo: 'map/', pathMatch: 'full' },
     { path: 'map/:id', component: MapPageComponent, canActivate: [AuthorizeGuard] },
     { path: 'dash', component: DashBoardComponent, canActivate: [AuthorizeGuard] },

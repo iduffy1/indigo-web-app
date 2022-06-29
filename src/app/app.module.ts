@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { DashBoardComponent } from './dashboard/dashboard.component';
 import { EventFilterComponent } from './event-filter/event-filter.component';
 import { EventsListComponent } from './events-list/events-list.component';
+import { RawRecordsListComponent } from './raw-records-list/raw-records-list.component';
 import { ErrorInterceptor } from './error.interceptor';
 import { GroupedEventsListComponent } from './grouped-events-list/grouped-events-list.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
@@ -47,6 +48,7 @@ import { ToolsComponent } from './tools/tools.component';
         MapPageComponent,
         DashBoardComponent,
         EventFilterComponent,
+        RawRecordsListComponent,
         GroupedEventFilterComponent,
         GroupedEventPoiListComponent,
         GroupedEventChartComponent,

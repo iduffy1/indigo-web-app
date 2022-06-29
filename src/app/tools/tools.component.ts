@@ -7,6 +7,7 @@ import { IndigoDataService } from "../indigo-data.service";
 })
 export class ToolsComponent  {
     recordId : string;
+    poiId : string;
     public fileContents : string;
 
     constructor(
