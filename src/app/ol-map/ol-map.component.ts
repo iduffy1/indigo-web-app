@@ -269,9 +269,11 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
         switch (poi.poiCode) {
             case "V.BP":
             case "V.RQ":
+            case "V.LP":
                 return "rgba(200, 55, 55, 0.8)";
             case "L.BP":
             case "L.RQ":
+            case "L.LP":
                 return "rgba(55, 55, 200, 0.8)";
             default:
                 // Bright Green to highlight undhandled Poi Code
@@ -314,6 +316,38 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
                     }),
                     zIndex: 999,
                 });
+            case "V.LP":
+            case "L.LP":
+                return new Style({
+                    image: new RegularShape({
+                        fill: new Fill({
+                            color: color,
+                        }),
+                        stroke: new Stroke({
+                            width: 1,
+                            color: color,
+                        }),
+                        points: 4,
+                        radius: 8,
+                        //angle: Math.PI / 4
+                    }),
+                    zIndex: 999,
+                });
+            default:
+                return new Style({
+                    image: new Circle({
+                        fill: new Fill({
+                            color: color,
+                        }),
+                        stroke: new Stroke({
+                            width: 1,
+                            color: color,
+                        }),
+                        radius: 6,
+                    }),
+                    zIndex: 999,
+                });
+
 
         }
     }
@@ -376,7 +410,7 @@ export class OlMapComponent implements AfterViewInit, OnDestroy {
                                     width: 1,
                                     color: colour,
                                 }),
-                                radius: 5 + valueAtLastDate / 20,
+                                radius: 5 + Math.abs(valueAtLastDate) / 20,
                             }),
                             zIndex: 999,
                         }),

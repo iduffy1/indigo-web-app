@@ -75,7 +75,7 @@ export class SingleEventChartComponent implements OnChanges {
                 pointBorderColor: '#2080E0',
                 pointBackgroundColor: '#2080E0',
                 fill: false,
-                hidden: this.poiData.poi.poiCode === 'L.BP',
+                hidden: !this.poiData.poi.poiCode.startsWith('V'),
                 lineTension: 0,
                 showLine: true
             },
@@ -87,7 +87,7 @@ export class SingleEventChartComponent implements OnChanges {
                 pointBorderColor: '#800000',
                 pointBackgroundColor: '#800000',
                 fill: false,
-                hidden: this.poiData.poi.poiCode === 'V.BP',
+                hidden: !this.poiData.poi.poiCode.startsWith('L'),
                 lineTension: 0,
                 showLine: true
             },
